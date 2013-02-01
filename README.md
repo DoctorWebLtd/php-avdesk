@@ -8,15 +8,15 @@ as easy as possible.
 
 Internally php-avdesk uses `dwavdapi` library to make a dialog with AV-Desk server through its XML API.
 
+
 Dependencies
 ============
 
-This module requires these other modules and libraries:
+  * Dr.Web `dwavdapi` library
+  * Dr.Web `dwavdapi` library headers (dev package)
+  * PHP dev package (5.3+)
 
-  * Dr.Web dwavdapi library
-  * Dr.Web dwavdapi library devel
-  * PHP Devel (5.3 or latter)
-  
+
 INSTALLATION
 ============
 
@@ -30,12 +30,11 @@ To install this module type the following:
 
 
 Copyright
-========
+=========
 
 Copyright (c) 2003-2013, Doctor Web, Ltd.
 
-Dr.Web php-avdesk is distributed under license available from LICENSE file shipped
-within distribution package.
+Dr.Web php-avdesk is distributed under license available from LICENSE file.
 
 
 --
