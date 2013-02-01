@@ -1,20 +1,13 @@
 /*
-  +----------------------------------------------------------------------+
-  | PHP Version 5                                                        |
-  +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2008 The PHP Group                                |
-  +----------------------------------------------------------------------+
-  | This source file is subject to version 3.01 of the PHP license,      |
-  | that is bundled with this package in the file LICENSE, and is        |
-  | available through the world-wide-web at the following url:           |
-  | http://www.php.net/license/3_01.txt                                  |
-  | If you did not receive a copy of the PHP license and are unable to   |
-  | obtain it through the world-wide-web, please send a note to          |
-  | license@php.net so we can mail you a copy immediately.               |
-  +----------------------------------------------------------------------+
-  | Author:                                                              |
-  +----------------------------------------------------------------------+
-*/
+ * Copyright (c) Doctor Web, 2003-2013
+ *
+ * Following code is the property of Doctor Web, Ltd.
+ * Dr.Web is a registered trademark of Doctor Web, Ltd.
+ *
+ * http://www.drweb.com
+ * http://www.av-desk.com
+ *
+ */
 
 #ifndef PHP_DWAVD_H
 #define PHP_DWAVD_H

@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) Doctor Web, 2003-2013
+ *
+ * Following code is the property of Doctor Web, Ltd.
+ * Dr.Web is a registered trademark of Doctor Web, Ltd.
+ *
+ * http://www.drweb.com
+ * http://www.av-desk.com
+ *
+ */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
