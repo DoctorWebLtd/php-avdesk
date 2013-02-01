@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Doctor Web, 2003-2011
+ * Copyright (c) Doctor Web, 2003-2013
  *
  * Following code is the property of Doctor Web, Ltd.
  * Dr.Web is a registred trademark of Doctor Web, Ltd.
