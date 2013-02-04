@@ -9,7 +9,7 @@ as easy as possible.
 Internally php-avdesk uses `dwavdapi` library to make a dialog with AV-Desk server through its XML API.
 
 
-Dependencies
+DEPENDENCIES
 ============
 
   * Dr.Web `dwavdapi` library
@@ -22,14 +22,20 @@ INSTALLATION
 
 To install this module type the following:
 
-* `cd php-avdesk`  
+* `cd php-avdesk`
 * `phpize`
 * `./configure`
 * `make`
 * `make install`
 
 
-Copyright
+API DOCUMENTATION
+=================
+
+http://doctorwebltd.github.com/php-avdesk/
+
+
+COPYRIGHT
 =========
 
 Copyright (c) 2003-2013, Doctor Web, Ltd.
