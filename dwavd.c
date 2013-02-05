@@ -2866,6 +2866,8 @@ PHP_FUNCTION(dwavd_grp_free) {
 
    Returns a value of a given parameter from group resource.
    On failure returns false. */
+   
+DIAGNOSTIC_OFF(deprecated-declarations)
 PHP_FUNCTION(dwavd_grp) {
     int rsrc_type = 0;
     int flag = -1;
@@ -2908,14 +2910,11 @@ PHP_FUNCTION(dwavd_grp) {
         case DWAVD_GRP_ADMINS:
             _dwavd_carray_to_phparray(&array, (const char **)dwavdapi_group_admins_array(grp), dwavdapi_group_admins_count(grp));
             RETURN_ZVAL(array, 1, 0);        
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated"  
         case DWAVD_GRP_EMAILS_COUNT:            
             RETURN_LONG(dwavdapi_group_emails_count(grp));           
         case DWAVD_GRP_EMAILS:
             _dwavd_carray_to_phparray(&array, (const char **)dwavdapi_group_emails_array(grp), dwavdapi_group_emails_count(grp));
             RETURN_ZVAL(array, 1, 0);
-#pragma GCC diagnostic pop             
         case DWAVD_GRP_STATIONS_COUNT:
             RETURN_LONG(dwavdapi_group_stations_count(grp));
         case DWAVD_GRP_STATIONS:
@@ -2929,12 +2928,13 @@ PHP_FUNCTION(dwavd_grp) {
     }
     DWAVD_UNKNOWN_OPTION(opt)
 }
-
+DIAGNOSTIC_ON(deprecated-declarations)
 
 /** mixed dwavd_grp_array(resource grp_info_res)
 
    Converts data from group information resource into an array and returns it.
    Returns an array with group resource data on success, or false otherwise. */
+DIAGNOSTIC_OFF(deprecated-declarations)
 PHP_FUNCTION(dwavd_grp_array) {
     int rsrc_type = 0;
     zval *res = NULL;
@@ -2966,12 +2966,9 @@ PHP_FUNCTION(dwavd_grp_array) {
     add_assoc_long(return_value, "child_groups_count", dwavdapi_group_child_groups_count(grp));    
     _dwavd_carray_to_phparray(&child_groups, (const char **)dwavdapi_group_child_groups_array(grp), dwavdapi_group_child_groups_count(grp));
     add_assoc_zval(return_value, "child_groups", child_groups);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated"     
     add_assoc_long(return_value, "emails_count", dwavdapi_group_emails_count(grp));
     _dwavd_carray_to_phparray(&emails, (const char **)dwavdapi_group_emails_array(grp), dwavdapi_group_emails_count(grp));
     add_assoc_zval(return_value, "emails", emails);
-#pragma GCC diagnostic pop
     add_assoc_long(return_value, "stations_count", dwavdapi_group_stations_count(grp));
     _dwavd_carray_to_phparray(&stations, (const char **)dwavdapi_group_stations_array(grp), dwavdapi_group_stations_count(grp));
     add_assoc_zval(return_value, "stations", stations);
@@ -2979,9 +2976,11 @@ PHP_FUNCTION(dwavd_grp_array) {
     _dwavd_carray_to_phparray(&admins, (const char **)dwavdapi_group_admins_array(grp), dwavdapi_group_admins_count(grp));
     add_assoc_zval(return_value, "admins", admins);
 }
+DIAGNOSTIC_ON(deprecated-declarations)
 
 
 /* Helper function, used further down. */
+DIAGNOSTIC_OFF(deprecated-declarations)
 static int _dwavd_grp_set(dwavdapi_group *grp, int flag TSRMLS_DC, zval *val) {    
     HashPosition pos = NULL;
     zval **array_item = NULL;
@@ -3014,12 +3013,9 @@ static int _dwavd_grp_set(dwavdapi_group *grp, int flag TSRMLS_DC, zval *val) {
                         _dwavd_error(E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
                         return 1;
                     }
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated"                      
                     if(DWAVDAPI_FAILURE == dwavdapi_group_add_email(grp, Z_STRVAL_PP(array_item))) {
                         return 1;
                     }
-#pragma GCC diagnostic pop                      
                 }
             }
             return 0;
@@ -3038,19 +3034,16 @@ static int _dwavd_grp_set(dwavdapi_group *grp, int flag TSRMLS_DC, zval *val) {
                         _dwavd_error(E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
                         return 1;
                     }
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated"                      
                     if(DWAVDAPI_FAILURE == dwavdapi_group_delete_email(grp, Z_STRVAL_PP(array_item))) {
                         return 1;
                     }
-#pragma GCC diagnostic pop                      
                 }
             }
             return 0;
     }
     return 1;
 }
-
+DIAGNOSTIC_ON(deprecated-declarations)
 
 /** bool dwavd_grp_set(resource grp_info_res, string param_name, mixed param_value)
 
@@ -4614,6 +4607,7 @@ PHP_FUNCTION(dwavd_st_free) {
 
    Returns a value of a given parameter from station resource.
    On failure returns false. */
+DIAGNOSTIC_OFF(deprecated-declarations)
 PHP_FUNCTION(dwavd_st) {
     int rsrc_type = 0;
     zval *res = NULL;
@@ -4662,10 +4656,7 @@ PHP_FUNCTION(dwavd_st) {
         case DWAVD_ST_FLOOR:
             DWAVD_RETURN_STRING_OR_NULL(dwavdapi_station_floor(st))
         case DWAVD_ST_URL:
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated"              
             DWAVD_RETURN_STRING_OR_NULL(dwavdapi_station_url(st))
-#pragma GCC diagnostic pop                    
         case DWAVD_ST_PASSWORD:
             DWAVD_RETURN_STRING_OR_NULL(dwavdapi_station_password(st))
         case DWAVD_ST_DESCRIPTION:
@@ -4688,14 +4679,11 @@ PHP_FUNCTION(dwavd_st) {
             DWAVD_RETURN_STRING_OR_NULL(dwavdapi_station_organization(st))
         case DWAVD_ST_PARENT_ID:
             DWAVD_RETURN_STRING_OR_NULL(dwavdapi_station_parent_id(st))
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated" 
         case DWAVD_ST_EMAILS:
             _dwavd_carray_to_phparray(&emails, (const char **)dwavdapi_station_emails_array(st), dwavdapi_station_emails_count(st));
             RETURN_ZVAL(emails, 1, 0);
         case DWAVD_ST_EMAILS_COUNT:
             RETURN_LONG(dwavdapi_station_emails_count(st))
-#pragma GCC diagnostic pop                    
         case DWAVD_ST_GROUPS:
             _dwavd_carray_to_phparray(&groups, (const char **)dwavdapi_station_groups_array(st), dwavdapi_station_groups_count(st));
             RETURN_ZVAL(groups, 1, 0);
@@ -4742,12 +4730,15 @@ PHP_FUNCTION(dwavd_st) {
     }
     DWAVD_UNKNOWN_OPTION(opt)
 }
-
+DIAGNOSTIC_ON(deprecated-declarations)
 
 /** mixed dwavd_st_array(resource st_info_res)
 
    Converts data from station information resource into an array and returns it.
-   Returns an array with station resource data on success, or false otherwise. */
+   Returns an array with station resource data on success, or false otherwise. 
+*/
+   
+DIAGNOSTIC_OFF(deprecated-declarations)
 PHP_FUNCTION(dwavd_st_array) {
     int rsrc_type = 0;
     zval *res = NULL;
@@ -4774,10 +4765,7 @@ PHP_FUNCTION(dwavd_st_array) {
     DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "floor", dwavdapi_station_floor(st))
     DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "department", dwavdapi_station_department(st))
     DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "province", dwavdapi_station_province(st))
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated"              
     DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "url", dwavdapi_station_url(st))
-#pragma GCC diagnostic pop             
     DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "organization", dwavdapi_station_organization(st))
     DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "lastseen_addr", dwavdapi_station_lastseen_addr(st))
     DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "os_name", (char *)dwavdapi_station_os_str(st))
@@ -4799,12 +4787,9 @@ PHP_FUNCTION(dwavd_st_array) {
     _dwavd_carray_to_phparray(&array, (const char **)dwavdapi_station_groups_array(st), dwavdapi_station_groups_count(st));
     add_assoc_zval(return_value, "groups", array);
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated"      
     add_assoc_long(return_value, "emails_count", dwavdapi_station_emails_count(st));
     _dwavd_carray_to_phparray(&array, (const char **)dwavdapi_station_emails_array(st), dwavdapi_station_emails_count(st));
     add_assoc_zval(return_value, "emails", array);
-#pragma GCC diagnostic pop     
     
     list = dwavdapi_station_rights_list(st);
     _dwavd_res_list_to_array(&array TSRMLS_CC, list, le_dwavd_rights_list);
@@ -4830,9 +4815,10 @@ PHP_FUNCTION(dwavd_st_array) {
     _dwavd_res_list_to_array(&array TSRMLS_CC, list, le_dwavd_modules_list);
     add_assoc_zval(return_value, "modules", array);
 }
-
+DIAGNOSTIC_ON(deprecated-declarations)
 
 /* Helper function, used further down. */
+DIAGNOSTIC_OFF(deprecated-declarations)
 static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {    
     HashPosition pos = NULL;
     zval **array_item = NULL;
@@ -4902,12 +4888,9 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
                         _dwavd_error(E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
                         return 1;
                     }
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated"                      
                     if(DWAVDAPI_FAILURE == dwavdapi_station_add_email(st, Z_STRVAL_PP(array_item))) {
                         return 1;
                     }
-#pragma GCC diagnostic pop                     
                 }
             }
             return 0;
@@ -4926,12 +4909,9 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
                         _dwavd_error(E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
                         return 1;
                     }
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated"                      
                     if(DWAVDAPI_FAILURE == dwavdapi_station_delete_email(st, Z_STRVAL_PP(array_item))) {
                         return 1;
                     }
-#pragma GCC diagnostic pop                     
                 }
             }
             return 0;
@@ -4985,6 +4965,7 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
     }    
     return 1;
 }
+DIAGNOSTIC_ON(deprecated-declarations)
 
 /** bool dwavd_st_set(resource st_info_res, string param_name, mixed param_value)
 

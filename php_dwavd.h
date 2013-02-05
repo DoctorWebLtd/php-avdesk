@@ -31,6 +31,37 @@ extern zend_module_entry dwavd_module_entry;
 #include "TSRM.h"
 #endif
 
+#if defined(__clang__)
+    #define DIAGNOSTIC_PRAGMA(x) DIAGNOSTIC_DO_PRAGMA(clang diagnostic x)
+    #define DIAGNOSTIC_OFF(x) \
+	       DIAGNOSTIC_PRAGMA(push) \
+	       DIAGNOSTIC_PRAGMA(ignored DIAGNOSTIC_JOIN_STRING(-W, x))
+    #define DIAGNOSTIC_ON(x) \
+	    DIAGNOSTIC_PRAGMA(pop)
+#elif defined(__GNUC__)
+    #define GNUC_NUM_VERSION (__GNUC__ * 100 + __GNUC_MINOR__)
+    #define DIAGNOSTIC_PRAGMA(x) DIAGNOSTIC_DO_PRAGMA(GCC diagnostic x)
+    #if GNUC_NUM_VERSION >= 402
+	    #if GNUC_NUM_VERSION >= 406
+	        #define DIAGNOSTIC_OFF(x) \
+		        DIAGNOSTIC_PRAGMA(push) \
+		        DIAGNOSTIC_PRAGMA(ignored DIAGNOSTIC_JOIN_STRING(-W, x))
+	        #define DIAGNOSTIC_ON(x) \
+		        DIAGNOSTIC_PRAGMA(pop)
+	    #else 
+	        #define DIAGNOSTIC_OFF(x) \
+		        DIAGNOSTIC_PRAGMA(ignored DIAGNOSTIC_JOIN_STRING(-W, x))
+	        #define DIAGNOSTIC_ON(x) \
+		        DIAGNOSTIC_PRAGMA(warning DIAGNOSTIC_JOIN_STRING(-W, x))
+	    #endif
+    #endif
+#endif
+
+#if !defined(DIAGNOSTIC_OFF) && !defined(DIAGNOSTIC_ON)
+    #define DIAGNOSTIC_OFF(x)
+    #define DIAGNOSTIC_ON(x)
+#endif
+
 #define DWAVD_EXTENSION_VERSION "1.1.0"
 
 /**
