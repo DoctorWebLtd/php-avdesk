@@ -304,11 +304,13 @@ enum {
     DWAVD_ADM_CREATED,
     DWAVD_ADM_MODIFIED,
     DWAVD_ADM_NAME,
+    DWAVD_ADM_READ_ONLY,
     DWAVD_ADM_LAST_NAME,
     DWAVD_ADM_MIDDLE_NAME,
     DWAVD_ADM_LOGIN,
     DWAVD_ADM_PASSWORD,
     DWAVD_ADM_DESCRIPTION,
+    DWAVD_ADM_LIMITED_RIGHTS,
     DWAVD_ADM_GROUPS,
     DWAVD_ADM_GROUPS_COUNT,
     DWAVD_ADM_TYPE,
@@ -769,6 +771,23 @@ enum {
                _dwavd_error(E_WARNING, "Expected string, got %s", _dwavd_var_type(val)); \
                return 1; \
          }
+
+#define DWAVD_ADM_SET_BOOL(res, lower_name, value) \
+        if(Z_TYPE_P(val) == IS_NULL) { \
+                if(DWAVDAPI_SUCCESS == dwavdapi_admin_set_##lower_name(res, 0)) { \
+                        return 0; \
+                } \
+                return 1; \
+        } else if (Z_TYPE_P(val) == IS_BOOL || Z_TYPE_P(val) == IS_LONG) { \
+                convert_to_ex_master(&val, long, LONG) \
+                if(DWAVDAPI_SUCCESS == dwavdapi_admin_set_##lower_name(res, Z_LVAL_P(value))) { \
+                        return 0; \
+                } \
+                return 1; \
+        } else {\
+                _dwavd_error(E_WARNING, "Expected integer, got %s", _dwavd_var_type(val)); \
+               return 1; \
+        }
 
 #define DWAVD_GRP_SET_STRING(res, lower_name, value) \
         if(Z_TYPE_P(val) == IS_NULL) { \

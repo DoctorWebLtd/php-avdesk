@@ -81,7 +81,7 @@ static int le_dwavd_virus = -1;
 static int le_dwavd_infcd_objs_list = -1;
 static int le_dwavd_infcd_obj = -1;
 
-static int _dwavd_lst_res[11];
+static int _dwavd_lst_res[12];
 static unsigned int _dwavd_lst_res_count = 0;
 
 ZEND_DECLARE_MODULE_GLOBALS(dwavd)
@@ -213,6 +213,8 @@ static _dwavd_opt _dwavd_admopt_array[] = {
     {"name", DWAVD_ADM_NAME},
     {"password", DWAVD_ADM_PASSWORD},
     {"type", DWAVD_ADM_TYPE},
+    {"readonly", DWAVD_ADM_READ_ONLY},
+    {"limited_rights", DWAVD_ADM_LIMITED_RIGHTS},
     {"delete_from_groups", DWAVD_ADM_DEL_FROM_GROUPS}
 };
 
@@ -2541,6 +2543,10 @@ PHP_FUNCTION(dwavd_adm) {
         case DWAVD_ADM_GROUPS:
             _dwavd_carray_to_phparray(&groups, (const char **)dwavdapi_admin_groups_array(adm), dwavdapi_admin_groups_count(adm));
             RETURN_ZVAL(groups, 1, 0);
+        case DWAVD_ADM_LIMITED_RIGHTS:
+            RETURN_BOOL(dwavdapi_admin_has_limited_rights(adm));
+        case DWAVD_ADM_READ_ONLY:
+            RETURN_BOOL(dwavdapi_admin_is_readonly(adm));
     }
     DWAVD_UNKNOWN_OPTION(opt)    
 }
@@ -2568,6 +2574,8 @@ PHP_FUNCTION(dwavd_adm_array) {
     DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "middle_name", dwavdapi_admin_middle_name(adm)) 
     DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "description", dwavdapi_admin_description(adm)) 
     add_assoc_long(return_value, "type", dwavdapi_admin_type(adm));
+    add_assoc_bool(return_value, "readonly", dwavdapi_admin_is_readonly(adm));
+    add_assoc_bool(return_value, "limited_rights", dwavdapi_admin_has_limited_rights(adm));
     add_assoc_long(return_value, "created", dwavdapi_admin_created_time(adm));
     add_assoc_long(return_value, "modified", dwavdapi_admin_modified_time(adm));
     add_assoc_long(return_value, "groups_count", dwavdapi_admin_groups_count(adm));
@@ -2587,7 +2595,7 @@ static int _dwavd_adm_set(dwavdapi_admin *adm, int flag TSRMLS_DC, zval *val) {
 
     switch(flag) {
         case DWAVD_ADM_DESCRIPTION:
-            DWAVD_ADM_SET_STRING(adm, description, val)     
+            DWAVD_ADM_SET_STRING(adm, description, val)    
         case DWAVD_ADM_ID:
             DWAVD_ADM_SET_STRING(adm, id, val) 
         case DWAVD_ADM_NAME:
@@ -2600,6 +2608,10 @@ static int _dwavd_adm_set(dwavdapi_admin *adm, int flag TSRMLS_DC, zval *val) {
             DWAVD_ADM_SET_STRING(adm, login, val) 
         case DWAVD_ADM_PASSWORD:
             DWAVD_ADM_SET_STRING(adm, password, val) 
+        case DWAVD_ADM_LIMITED_RIGHTS:
+            DWAVD_ADM_SET_BOOL(adm, limited_rights, val) 
+        case DWAVD_ADM_READ_ONLY:
+            DWAVD_ADM_SET_BOOL(adm, readonly, val) 
         case DWAVD_ADM_GROUPS: {
             DWAVD_EXPECTED_ARRAY_WITH_RET(val, 1)
             DWAVD_ARRAY_EMPTY_WITH_RET(Z_ARRVAL_P(val), 1)
@@ -4552,7 +4564,6 @@ PHP_FUNCTION(dwavd_package) {
     }
     DWAVD_UNKNOWN_OPTION(opt)
 }
-
 
 /** mixed dwavd_package_array(resource package_res)
 
