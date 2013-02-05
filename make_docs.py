@@ -11,6 +11,7 @@ RE_FUNC_DESCR = re.compile('([^\n]+)\n(.*)', re.U|re.S)
 RE_FUNC_PARAMS = re.compile('(?P<type>\S+)\s+(?P<name>\S+)', re.U)
 
 SOURCE_FILES = ['dwavd.c']
+README_FILE = 'README.md'
 
 
 def parse_files():
@@ -175,7 +176,7 @@ def generate_html(docstrings):
     html = html_source.replace('{{ page_title }}', page_title).\
         replace('{{ toc }}', '<ul>%s</ul>' % ''.join(toc)).\
         replace('{{ body }}', ''.join(body)).\
-        replace('{{ readme_source }}', read_from_file('README').
+        replace('{{ readme_source }}', read_from_file(README_FILE).
         replace('\n', '<br />'))
 
     return html
