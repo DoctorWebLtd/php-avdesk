@@ -9,6 +9,7 @@
  *
  */
 
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -61,6 +62,8 @@ static int le_dwavd_rights_list = -1;
 static int le_dwavd_right = -1;
 static int le_dwavd_bases_list = -1;
 static int le_dwavd_base = -1;
+static int le_dwavd_packages_list = -1;
+static int le_dwavd_package = -1;
 static int le_dwavd_modules_list = -1;
 static int le_dwavd_module = -1;
 static int le_dwavd_st = -1;
@@ -90,6 +93,7 @@ static void _dwavd_res_list_to_array(zval **php_array TSRMLS_DC, dwavdapi_list *
 static void _dwavd_component_running_array(zval **php_array, const dwavdapi_running_component *cmp);
 static void _dwavd_component_installed_array(zval **php_array, const dwavdapi_installed_component *cmp);
 static void _dwavd_base_array(zval **php_array, const dwavdapi_base *base);
+static void _dwavd_package_array(zval **php_array, const dwavdapi_package *package);
 static void _dwavd_module_array(zval **php_array, const dwavdapi_module *module);
 static void _dwavd_scans_array(zval **php_array, const dwavdapi_statistics_scans *scans);
 static void _dwavd_infcd_array(zval **php_array, const dwavdapi_statistics_infections *infcd);
@@ -377,6 +381,18 @@ static _dwavd_opt _dwavd_baseopt_array[] = {
 };
 
 
+/** ======= AV-Agent Package resource ======= */
+
+/** Resource parameters available
+
+    url - Package download URL
+    type - Package platform type
+*/
+static _dwavd_opt _dwavd_packopt_array[] = {
+    {"url", DWAVD_PACKAGE_URL},
+    {"type", DWAVD_PACKAGE_TYPE}
+};
+
 /** ======= AV Module resource ======= */
 
 /** Resource parameters available
@@ -418,6 +434,7 @@ static _dwavd_opt _dwavd_moduleopt_array[] = {
     city - 
     floor - 
     url - Agent download URL
+    config - Agent configuration download URL
     password - Agent password
     description - 
     id - Station unique ID
@@ -435,6 +452,7 @@ static _dwavd_opt _dwavd_moduleopt_array[] = {
     groups_count - 
     components - AV components
     bases - AV bases
+    packages - AV-agent packages
     modules - AV modules
     rights - Restrictions for agent
     components_running - AV components currently running at station 
@@ -461,6 +479,7 @@ static _dwavd_opt _dwavd_stopt_array[] = {
     {"city", DWAVD_ST_CITY},
     {"floor", DWAVD_ST_FLOOR},
     {"url", DWAVD_ST_URL},
+    {"config", DWAVD_ST_CONFIG},
     {"password", DWAVD_ST_PASSWORD},
     {"description", DWAVD_ST_DESCRIPTION},
     {"id", DWAVD_ST_ID},
@@ -478,6 +497,7 @@ static _dwavd_opt _dwavd_stopt_array[] = {
     {"groups_count", DWAVD_ST_GROUPS_COUNT},
     {"components", DWAVD_ST_COMPONENTS},
     {"bases", DWAVD_ST_BASES},
+    {"packages", DWAVD_ST_PACKAGES},
     {"modules", DWAVD_ST_MODULES},
     {"rights", DWAVD_ST_RIGHTS},
     {"components_running", DWAVD_ST_COMPONENTS_RUN},
@@ -776,6 +796,11 @@ static void _dwavd_bases_dtor(zend_rsrc_list_entry *rsrc TSRMLS_DC) {
     dwavdapi_list_destroy(lst, (dwavdapi_dtor_funct)dwavdapi_base_destroy);
 }
 
+static void _dwavd_packages_dtor(zend_rsrc_list_entry *rsrc TSRMLS_DC) {
+    dwavdapi_list *lst = (dwavdapi_list *) rsrc->ptr;
+    dwavdapi_list_destroy(lst, (dwavdapi_dtor_funct)dwavdapi_package_destroy);
+}
+
 static void _dwavd_rights_dtor(zend_rsrc_list_entry *rsrc TSRMLS_DC) {
     dwavdapi_list *lst = (dwavdapi_list *) rsrc->ptr;
     dwavdapi_list_destroy(lst, (dwavdapi_dtor_funct)dwavdapi_right_destroy);
@@ -955,6 +980,18 @@ static void _dwavd_base_array(zval **php_array, const dwavdapi_base *base) {
     *php_array = array;
 }
 
+static void _dwavd_package_array(zval **php_array, const dwavdapi_package *package) {
+    zval *array = NULL;
+    
+    MAKE_STD_ZVAL(array)
+    array_init(array);
+    if (package!=NULL) {
+        DWAVD_ADD_ASSOC_STRING_OR_NULL(array, "url", (char *)dwavdapi_package_url(package)) 
+        add_assoc_long(array, "type", dwavdapi_package_type(package)); 
+    }
+    *php_array = array;
+}
+
 static void _dwavd_infcd_obj_array(zval **php_array, const dwavdapi_infected_object *obj) {
     zval *array = NULL;
     MAKE_STD_ZVAL(array)
@@ -1090,6 +1127,8 @@ const zend_function_entry dwavd_functions[] = {
     PHP_FE(dwavd_st_change, NULL)
     PHP_FE(dwavd_base, NULL)
     PHP_FE(dwavd_base_array, NULL)
+    PHP_FE(dwavd_package, NULL)
+    PHP_FE(dwavd_package_array, NULL)
     PHP_FE(dwavd_module, NULL)
     PHP_FE(dwavd_module_array, NULL)
     PHP_FE(dwavd_component_installed_array, NULL)
@@ -1233,6 +1272,20 @@ PHP_MINIT_FUNCTION(dwavd) {
     REGISTER_LONG_CONSTANT("DWAVD_COMPONENT_VADERETRO", DWAVDAPI_COMPONENT_VADERETRO, CONST_CS | CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("DWAVD_COMPONENT_OUTLOOK", DWAVDAPI_COMPONENT_OUTLOOK, CONST_CS | CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("DWAVD_COMPONENT_FIREWALL", DWAVDAPI_COMPONENT_FIREWALL, CONST_CS | CONST_PERSISTENT);
+    
+    /** AV-agent packages types
+
+        DWAVD_PACKAGE_TYPE_WINDOWS - Windows
+        DWAVD_PACKAGE_TYPE_ANDROID - Android
+        DWAVD_PACKAGE_TYPE_MACOS - MacOS
+        DWAVD_PACKAGE_TYPE_LINUX_32 - Linux 32bit
+        DWAVD_PACKAGE_TYPE_LINUX_64 - Linux 64bit
+     */
+    REGISTER_LONG_CONSTANT("DWAVD_PACKAGE_TYPE_WINDOWS", DWAVDAPI_PACKAGE_TYPE_WINDOWS, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("DWAVD_PACKAGE_TYPE_ANDROID", DWAVDAPI_PACKAGE_TYPE_ANDROID, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("DWAVD_PACKAGE_TYPE_MACOS", DWAVDAPI_PACKAGE_TYPE_MACOS, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("DWAVD_PACKAGE_TYPE_LINUX_32", DWAVDAPI_PACKAGE_TYPE_LINUX_32, CONST_CS | CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("DWAVD_PACKAGE_TYPE_LINUX_64", DWAVDAPI_PACKAGE_TYPE_LINUX_64, CONST_CS | CONST_PERSISTENT);
     
     /** AV Components states 
 
@@ -1384,6 +1437,8 @@ PHP_MINIT_FUNCTION(dwavd) {
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_BASE_VERSION)
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_BASE_VIRUSES)
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_BASE_CREATED)
+    DWAVD_REGISTER_LONG_CONSTANT(DWAVD_PACKAGE_URL)
+    DWAVD_REGISTER_LONG_CONSTANT(DWAVD_PACKAGE_TYPE)
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_MOD_FILE)
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_MOD_VERSION)
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_MOD_CREATED)
@@ -1406,6 +1461,7 @@ PHP_MINIT_FUNCTION(dwavd) {
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_ST_CITY)
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_ST_FLOOR)
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_ST_URL)
+    DWAVD_REGISTER_LONG_CONSTANT(DWAVD_ST_CONFIG)
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_ST_PASSWORD)
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_ST_DESCRIPTION)
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_ST_ID)
@@ -1424,6 +1480,7 @@ PHP_MINIT_FUNCTION(dwavd) {
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_ST_GROUPS_COUNT)
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_ST_COMPONENTS)
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_ST_BASES)
+    DWAVD_REGISTER_LONG_CONSTANT(DWAVD_ST_PACKAGES)
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_ST_MODULES)
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_ST_RIGHTS)
     DWAVD_REGISTER_LONG_CONSTANT(DWAVD_ST_COMPONENTS_RUN)
@@ -1507,6 +1564,8 @@ PHP_MINIT_FUNCTION(dwavd) {
     le_dwavd_module = zend_register_list_destructors_ex(NULL, NULL, LE_DWAVD_MODULE_NAME, module_number);
     le_dwavd_bases_list = zend_register_list_destructors_ex(_dwavd_bases_dtor, NULL, LE_DWAVD_BASES_LST_NAME, module_number);
     le_dwavd_base = zend_register_list_destructors_ex(NULL, NULL, LE_DWAVD_BASE_NAME, module_number);
+    le_dwavd_packages_list = zend_register_list_destructors_ex(_dwavd_packages_dtor, NULL, LE_DWAVD_PACKAGES_LST_NAME, module_number);
+    le_dwavd_package = zend_register_list_destructors_ex(NULL, NULL, LE_DWAVD_PACKAGE_NAME, module_number);
     le_dwavd_trf_list = zend_register_list_destructors_ex(_dwavd_grp_list_dtor, NULL, LE_DWAVD_TRF_LST_NAME, module_number);
     le_dwavd_grp_list = zend_register_list_destructors_ex(_dwavd_grp_list_dtor, NULL, LE_DWAVD_GRP_LST_NAME, module_number);
     le_dwavd_adm_list = zend_register_list_destructors_ex(_dwavd_adm_list_dtor, NULL, LE_DWAVD_ADM_LST_NAME, module_number);    
@@ -1525,11 +1584,12 @@ PHP_MINIT_FUNCTION(dwavd) {
     _dwavd_lst_res[3] = le_dwavd_components_installed_list;
     _dwavd_lst_res[4] = le_dwavd_modules_list;
     _dwavd_lst_res[5] = le_dwavd_bases_list;
-    _dwavd_lst_res[6] = le_dwavd_trf_list;
-    _dwavd_lst_res[7] = le_dwavd_grp_list;
-    _dwavd_lst_res[8] = le_dwavd_adm_list;
-    _dwavd_lst_res[9] = le_dwavd_viruses_list;
-    _dwavd_lst_res[10] = le_dwavd_infcd_objs_list;
+    _dwavd_lst_res[6] = le_dwavd_packages_list;
+    _dwavd_lst_res[7] = le_dwavd_trf_list;
+    _dwavd_lst_res[8] = le_dwavd_grp_list;
+    _dwavd_lst_res[9] = le_dwavd_adm_list;
+    _dwavd_lst_res[10] = le_dwavd_viruses_list;
+    _dwavd_lst_res[11] = le_dwavd_infcd_objs_list;
     _dwavd_lst_res_count = sizeof(_dwavd_lst_res)/sizeof(int);
 
     REGISTER_INI_ENTRIES();
@@ -2866,7 +2926,7 @@ PHP_FUNCTION(dwavd_grp_free) {
 
    Returns a value of a given parameter from group resource.
    On failure returns false. */
-   
+
 DIAGNOSTIC_OFF(deprecated-declarations)
 PHP_FUNCTION(dwavd_grp) {
     int rsrc_type = 0;
@@ -2909,12 +2969,12 @@ PHP_FUNCTION(dwavd_grp) {
             RETURN_LONG(dwavdapi_group_admins_count(grp));
         case DWAVD_GRP_ADMINS:
             _dwavd_carray_to_phparray(&array, (const char **)dwavdapi_group_admins_array(grp), dwavdapi_group_admins_count(grp));
-            RETURN_ZVAL(array, 1, 0);        
+            RETURN_ZVAL(array, 1, 0);         
         case DWAVD_GRP_EMAILS_COUNT:            
             RETURN_LONG(dwavdapi_group_emails_count(grp));           
         case DWAVD_GRP_EMAILS:
             _dwavd_carray_to_phparray(&array, (const char **)dwavdapi_group_emails_array(grp), dwavdapi_group_emails_count(grp));
-            RETURN_ZVAL(array, 1, 0);
+            RETURN_ZVAL(array, 1, 0);         
         case DWAVD_GRP_STATIONS_COUNT:
             RETURN_LONG(dwavdapi_group_stations_count(grp));
         case DWAVD_GRP_STATIONS:
@@ -2933,7 +2993,9 @@ DIAGNOSTIC_ON(deprecated-declarations)
 /** mixed dwavd_grp_array(resource grp_info_res)
 
    Converts data from group information resource into an array and returns it.
-   Returns an array with group resource data on success, or false otherwise. */
+   Returns an array with group resource data on success, or false otherwise. 
+ */
+
 DIAGNOSTIC_OFF(deprecated-declarations)
 PHP_FUNCTION(dwavd_grp_array) {
     int rsrc_type = 0;
@@ -2965,7 +3027,7 @@ PHP_FUNCTION(dwavd_grp_array) {
     add_assoc_long(return_value, "modified", dwavdapi_group_modified_time(grp));
     add_assoc_long(return_value, "child_groups_count", dwavdapi_group_child_groups_count(grp));    
     _dwavd_carray_to_phparray(&child_groups, (const char **)dwavdapi_group_child_groups_array(grp), dwavdapi_group_child_groups_count(grp));
-    add_assoc_zval(return_value, "child_groups", child_groups);
+    add_assoc_zval(return_value, "child_groups", child_groups);   
     add_assoc_long(return_value, "emails_count", dwavdapi_group_emails_count(grp));
     _dwavd_carray_to_phparray(&emails, (const char **)dwavdapi_group_emails_array(grp), dwavdapi_group_emails_count(grp));
     add_assoc_zval(return_value, "emails", emails);
@@ -2977,7 +3039,6 @@ PHP_FUNCTION(dwavd_grp_array) {
     add_assoc_zval(return_value, "admins", admins);
 }
 DIAGNOSTIC_ON(deprecated-declarations)
-
 
 /* Helper function, used further down. */
 DIAGNOSTIC_OFF(deprecated-declarations)
@@ -3012,10 +3073,10 @@ static int _dwavd_grp_set(dwavdapi_group *grp, int flag TSRMLS_DC, zval *val) {
                     if(Z_TYPE_PP(array_item) != IS_STRING) {
                         _dwavd_error(E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
                         return 1;
-                    }
+                    }                     
                     if(DWAVDAPI_FAILURE == dwavdapi_group_add_email(grp, Z_STRVAL_PP(array_item))) {
                         return 1;
-                    }
+                    }                    
                 }
             }
             return 0;
@@ -3033,10 +3094,10 @@ static int _dwavd_grp_set(dwavdapi_group *grp, int flag TSRMLS_DC, zval *val) {
                     if(Z_TYPE_PP(array_item) != IS_STRING) {
                         _dwavd_error(E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
                         return 1;
-                    }
+                    }                    
                     if(DWAVDAPI_FAILURE == dwavdapi_group_delete_email(grp, Z_STRVAL_PP(array_item))) {
                         return 1;
-                    }
+                    }                    
                 }
             }
             return 0;
@@ -4021,6 +4082,9 @@ PHP_FUNCTION(dwavd_list_current) {
     } else if(le_dwavd_bases_list == res_found_type) {
         ZEND_REGISTER_RESOURCE(return_value, (dwavdapi_base *)data, le_dwavd_base);
         return;
+    } else if(le_dwavd_packages_list == res_found_type) {
+        ZEND_REGISTER_RESOURCE(return_value, (dwavdapi_package *)data, le_dwavd_package);
+        return;
     } else if(le_dwavd_modules_list == res_found_type) {
         ZEND_REGISTER_RESOURCE(return_value, (dwavdapi_module *)data, le_dwavd_module);
         return;
@@ -4108,6 +4172,15 @@ static void _dwavd_res_list_to_array(zval **php_array TSRMLS_DC, dwavdapi_list *
                     i++;
                 }
             } while(dwavdapi_list_next(lst) != DWAVDAPI_FAILURE);
+        } else if(res_found_type==le_dwavd_packages_list) {
+             do {
+                data = dwavdapi_list_current_data(lst);
+                if(data!=NULL) {
+                    _dwavd_package_array(&h_array, (dwavdapi_package *)data);
+                    add_index_zval(n_array, i, h_array);
+                    i++;
+                }
+            } while (dwavdapi_list_next(lst)!=DWAVDAPI_FAILURE);
         } else if(le_dwavd_modules_list == res_found_type) {
              do {
                 data = dwavdapi_list_current_data(lst);
@@ -4452,6 +4525,58 @@ PHP_FUNCTION(dwavd_base_array) {
 
 
 
+/** ======= AV-Agent package resource ======= */
+
+/** mixed dwavd_package(resource package_res, string param_name)
+
+   Returns a value of a given parameter from AV-agent package resource.
+   On failure returns false. */
+PHP_FUNCTION(dwavd_package) {
+    int res_type = 0;
+    int flag = -1;
+    zval *opt = NULL;
+    zval *res = NULL;
+    dwavdapi_package *package = NULL;
+    
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt)==FAILURE) {
+        RETURN_FALSE
+    }
+    DWAVD_FETCH_PACKAGE_RES_WITH_RETURN_FALSE(package, Z_RESVAL_P(res), le_dwavd_package, res_type)
+    DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_packopt_array)
+    switch(flag) {
+        case DWAVD_PACKAGE_URL:
+            DWAVD_RETURN_STRING_OR_NULL(dwavdapi_package_url(package));
+        case DWAVD_PACKAGE_TYPE:
+            RETURN_LONG(dwavdapi_package_type(package));
+
+    }
+    DWAVD_UNKNOWN_OPTION(opt)
+}
+
+
+/** mixed dwavd_package_array(resource package_res)
+
+   Converts data from AV-agent package resource into an array and returns it.
+   Returns an array with AV-agent package resource data on success, or false otherwise. */
+PHP_FUNCTION(dwavd_package_array) {
+    int res_type = 0;
+    zval *array = NULL;
+    zval *res = NULL;
+    dwavdapi_package *package = NULL;
+    
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res)==FAILURE) {
+        RETURN_FALSE
+    }
+    DWAVD_FETCH_PACKAGE_RES_WITH_RETURN_FALSE(package, Z_RESVAL_P(res), le_dwavd_package, res_type)
+    array_init(return_value);
+    _dwavd_package_array(&array, package);
+    *return_value = *array;
+    zval_copy_ctor(return_value);
+    INIT_PZVAL(return_value);
+}
+
+
+
 /** ======= AV Module resource ======= */
 
 /* Helper function, used further down. */
@@ -4655,8 +4780,10 @@ PHP_FUNCTION(dwavd_st) {
             DWAVD_RETURN_STRING_OR_NULL(dwavdapi_station_city(st))
         case DWAVD_ST_FLOOR:
             DWAVD_RETURN_STRING_OR_NULL(dwavdapi_station_floor(st))
-        case DWAVD_ST_URL:
-            DWAVD_RETURN_STRING_OR_NULL(dwavdapi_station_url(st))
+        case DWAVD_ST_CONFIG:
+            DWAVD_RETURN_STRING_OR_NULL(dwavdapi_station_config(st))
+        case DWAVD_ST_URL:            
+            DWAVD_RETURN_STRING_OR_NULL(dwavdapi_station_url(st))                 
         case DWAVD_ST_PASSWORD:
             DWAVD_RETURN_STRING_OR_NULL(dwavdapi_station_password(st))
         case DWAVD_ST_DESCRIPTION:
@@ -4677,13 +4804,12 @@ PHP_FUNCTION(dwavd_st) {
             DWAVD_RETURN_STRING_OR_NULL(dwavdapi_station_tariff_id(st))
         case DWAVD_ST_ORGANIZATION:
             DWAVD_RETURN_STRING_OR_NULL(dwavdapi_station_organization(st))
-        case DWAVD_ST_PARENT_ID:
-            DWAVD_RETURN_STRING_OR_NULL(dwavdapi_station_parent_id(st))
+        case DWAVD_ST_PARENT_ID: 
         case DWAVD_ST_EMAILS:
             _dwavd_carray_to_phparray(&emails, (const char **)dwavdapi_station_emails_array(st), dwavdapi_station_emails_count(st));
             RETURN_ZVAL(emails, 1, 0);
         case DWAVD_ST_EMAILS_COUNT:
-            RETURN_LONG(dwavdapi_station_emails_count(st))
+            RETURN_LONG(dwavdapi_station_emails_count(st))                
         case DWAVD_ST_GROUPS:
             _dwavd_carray_to_phparray(&groups, (const char **)dwavdapi_station_groups_array(st), dwavdapi_station_groups_count(st));
             RETURN_ZVAL(groups, 1, 0);
@@ -4698,6 +4824,11 @@ PHP_FUNCTION(dwavd_st) {
             list = dwavdapi_station_bases_list(st);
             dwavdapi_list_ctor(&n_list, list, (dwavdapi_ctor_funct)dwavdapi_base_ctor);
             rsrc_id = ZEND_REGISTER_RESOURCE(NULL, n_list, le_dwavd_bases_list)
+            RETURN_RESOURCE(rsrc_id);     
+        case DWAVD_ST_PACKAGES:
+            list = dwavdapi_station_packages_list(st);
+            dwavdapi_list_ctor(&n_list, list, (dwavdapi_ctor_funct)dwavdapi_package_ctor);
+            rsrc_id = ZEND_REGISTER_RESOURCE(NULL, n_list, le_dwavd_packages_list)
             RETURN_RESOURCE(rsrc_id);     
         case DWAVD_ST_MODULES:
             list = dwavdapi_station_modules_list(st);
@@ -4735,9 +4866,7 @@ DIAGNOSTIC_ON(deprecated-declarations)
 /** mixed dwavd_st_array(resource st_info_res)
 
    Converts data from station information resource into an array and returns it.
-   Returns an array with station resource data on success, or false otherwise. 
-*/
-   
+   Returns an array with station resource data on success, or false otherwise. */
 DIAGNOSTIC_OFF(deprecated-declarations)
 PHP_FUNCTION(dwavd_st_array) {
     int rsrc_type = 0;
@@ -4765,7 +4894,8 @@ PHP_FUNCTION(dwavd_st_array) {
     DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "floor", dwavdapi_station_floor(st))
     DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "department", dwavdapi_station_department(st))
     DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "province", dwavdapi_station_province(st))
-    DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "url", dwavdapi_station_url(st))
+    DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "config", dwavdapi_station_config(st))            
+    DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "url", dwavdapi_station_url(st))          
     DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "organization", dwavdapi_station_organization(st))
     DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "lastseen_addr", dwavdapi_station_lastseen_addr(st))
     DWAVD_ADD_ASSOC_STRING_OR_NULL(return_value, "os_name", (char *)dwavdapi_station_os_str(st))
@@ -4786,10 +4916,10 @@ PHP_FUNCTION(dwavd_st_array) {
     add_assoc_long(return_value, "groups_count", dwavdapi_station_groups_count(st));    
     _dwavd_carray_to_phparray(&array, (const char **)dwavdapi_station_groups_array(st), dwavdapi_station_groups_count(st));
     add_assoc_zval(return_value, "groups", array);
-
+    
     add_assoc_long(return_value, "emails_count", dwavdapi_station_emails_count(st));
     _dwavd_carray_to_phparray(&array, (const char **)dwavdapi_station_emails_array(st), dwavdapi_station_emails_count(st));
-    add_assoc_zval(return_value, "emails", array);
+    add_assoc_zval(return_value, "emails", array); 
     
     list = dwavdapi_station_rights_list(st);
     _dwavd_res_list_to_array(&array TSRMLS_CC, list, le_dwavd_rights_list);
@@ -4810,6 +4940,10 @@ PHP_FUNCTION(dwavd_st_array) {
     list = dwavdapi_station_bases_list(st);
     _dwavd_res_list_to_array(&array TSRMLS_CC, list, le_dwavd_bases_list);
     add_assoc_zval(return_value, "bases", array);
+    
+    list = dwavdapi_station_packages_list(st);
+    _dwavd_res_list_to_array(&array TSRMLS_CC, list, le_dwavd_packages_list);
+    add_assoc_zval(return_value, "packages", array);
     
     list = dwavdapi_station_modules_list(st);
     _dwavd_res_list_to_array(&array TSRMLS_CC, list, le_dwavd_modules_list);
@@ -4887,10 +5021,10 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
                     if(Z_TYPE_PP(array_item) != IS_STRING) {
                         _dwavd_error(E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
                         return 1;
-                    }
+                    }                    
                     if(DWAVDAPI_FAILURE == dwavdapi_station_add_email(st, Z_STRVAL_PP(array_item))) {
                         return 1;
-                    }
+                    }                  
                 }
             }
             return 0;
@@ -4908,10 +5042,10 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
                     if(Z_TYPE_PP(array_item) != IS_STRING) {
                         _dwavd_error(E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
                         return 1;
-                    }
+                    }                    
                     if(DWAVDAPI_FAILURE == dwavdapi_station_delete_email(st, Z_STRVAL_PP(array_item))) {
                         return 1;
-                    }
+                    }                  
                 }
             }
             return 0;

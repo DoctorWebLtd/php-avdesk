@@ -1,4 +1,4 @@
-/*
+/** 
  * Copyright (c) Doctor Web, 2003-2013
  *
  * Following code is the property of Doctor Web, Ltd.
@@ -56,7 +56,7 @@ extern zend_module_entry dwavd_module_entry;
 	    #endif
     #endif
 #endif
-
+ 
 #if !defined(DIAGNOSTIC_OFF) && !defined(DIAGNOSTIC_ON)
     #define DIAGNOSTIC_OFF(x)
     #define DIAGNOSTIC_ON(x)
@@ -97,6 +97,8 @@ extern zend_module_entry dwavd_module_entry;
 #define LE_DWAVD_RIGHT_NAME                     "Dr.Web AV-Desk right"
 #define LE_DWAVD_BASES_LST_NAME                 "Dr.Web AV-Desk bases list"
 #define LE_DWAVD_BASE_NAME                      "Dr.Web AV-Desk base"
+#define LE_DWAVD_PACKAGES_LST_NAME              "Dr.Web AV-Desk agent packages list"
+#define LE_DWAVD_PACKAGE_NAME                   "Dr.Web AV-Desk agent package"
 #define LE_DWAVD_MODULES_LST_NAME               "Dr.Web AV-Desk modules list"
 #define LE_DWAVD_MODULE_NAME                    "Dr.Web AV-Desk module"
 #define LE_DWAVD_ST_NAME                        "Dr.Web AV-Desk station"
@@ -208,6 +210,8 @@ PHP_FUNCTION(dwavd_st_change);
 PHP_FUNCTION(dwavd_st_delete);
 PHP_FUNCTION(dwavd_base);
 PHP_FUNCTION(dwavd_base_array);
+PHP_FUNCTION(dwavd_package);
+PHP_FUNCTION(dwavd_package_array);
 PHP_FUNCTION(dwavd_module);
 PHP_FUNCTION(dwavd_module_array);
 PHP_FUNCTION(dwavd_component_installed_array);
@@ -366,6 +370,8 @@ enum {
     DWAVD_BASE_VERSION,
     DWAVD_BASE_VIRUSES,
     DWAVD_BASE_CREATED,
+    DWAVD_PACKAGE_URL,
+    DWAVD_PACKAGE_TYPE,
     DWAVD_MOD_FILE,
     DWAVD_MOD_VERSION,
     DWAVD_MOD_CREATED,
@@ -388,6 +394,7 @@ enum {
     DWAVD_ST_CITY,
     DWAVD_ST_FLOOR,
     DWAVD_ST_URL,
+    DWAVD_ST_CONFIG,
     DWAVD_ST_PASSWORD,
     DWAVD_ST_DESCRIPTION,
     DWAVD_ST_ID,
@@ -406,6 +413,7 @@ enum {
     DWAVD_ST_GROUPS_COUNT,
     DWAVD_ST_COMPONENTS,
     DWAVD_ST_BASES,
+    DWAVD_ST_PACKAGES,
     DWAVD_ST_MODULES,
     DWAVD_ST_RIGHTS,
     DWAVD_ST_COMPONENTS_RUN,
@@ -694,6 +702,13 @@ enum {
         DWAVD_INVALID_RESOURCE \
         RETURN_FALSE \
     }      
+
+#define DWAVD_FETCH_PACKAGE_RES_WITH_RETURN_FALSE(res, res_id, res_type, res_found_type) \
+    res = (dwavdapi_package *) zend_list_find(res_id, &res_found_type); \
+    if (NULL == res || res_found_type != res_type) { \
+        DWAVD_INVALID_RESOURCE \
+        RETURN_FALSE \
+    }   
 
 #define DWAVD_FETCH_MOD_RES_WITH_RETURN_FALSE(res, res_id, res_type, res_found_type) \
     res = (dwavdapi_module *) zend_list_find(res_id, &res_found_type); \
