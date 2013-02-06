@@ -5750,7 +5750,7 @@ PHP_FUNCTION(dwavd_virus) {
         RETURN_FALSE
     }
     DWAVD_FETCH_VIRUS_RES_WITH_RETURN_FALSE(virus, Z_RESVAL_P(res), le_dwavd_virus, rsrc_type)
-    DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_traffic_opt_array)
+    DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_virus_opt_array)
     
     switch(flag) {
         case DWAVD_VIRUS_NAME:
