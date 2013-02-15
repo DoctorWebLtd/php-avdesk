@@ -1714,6 +1714,7 @@ PHP_FUNCTION(dwavd_init) {
             RETURN_FALSE
         }
     } 
+    
     ZEND_REGISTER_RESOURCE(return_value, handle, le_dwavd);
 }
 
@@ -2595,19 +2596,19 @@ static int _dwavd_adm_set(dwavdapi_admin *adm, int flag TSRMLS_DC, zval *val) {
 
     switch(flag) {
         case DWAVD_ADM_DESCRIPTION:
-            DWAVD_ADM_SET_STRING(adm, description, val)    
+            DWAVD_ADM_SET_STRING(adm, description, val, 0)    
         case DWAVD_ADM_ID:
-            DWAVD_ADM_SET_STRING(adm, id, val) 
+            DWAVD_ADM_SET_STRING(adm, id, val, 0) 
         case DWAVD_ADM_NAME:
-            DWAVD_ADM_SET_STRING(adm, name, val) 
+            DWAVD_ADM_SET_STRING(adm, name, val, 0) 
         case DWAVD_ADM_LAST_NAME:
-            DWAVD_ADM_SET_STRING(adm, last_name, val) 
+            DWAVD_ADM_SET_STRING(adm, last_name, val, 0) 
         case DWAVD_ADM_MIDDLE_NAME:
-            DWAVD_ADM_SET_STRING(adm, middle_name, val) 
+            DWAVD_ADM_SET_STRING(adm, middle_name, val, 0) 
         case DWAVD_ADM_LOGIN:
-            DWAVD_ADM_SET_STRING(adm, login, val) 
+            DWAVD_ADM_SET_STRING(adm, login, val, 1) 
         case DWAVD_ADM_PASSWORD:
-            DWAVD_ADM_SET_STRING(adm, password, val) 
+            DWAVD_ADM_SET_STRING(adm, password, val, 0) 
         case DWAVD_ADM_LIMITED_RIGHTS:
             DWAVD_ADM_SET_BOOL(adm, limited_rights, val) 
         case DWAVD_ADM_READ_ONLY:
@@ -2677,7 +2678,6 @@ PHP_FUNCTION(dwavd_adm_set) {
     }
     DWAVD_FETCH_ADM_RES_WITH_RETURN_FALSE(adm, Z_RESVAL_P(res), le_dwavd_adm, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_admopt_array)
-    DWAVD_VALUE_CANT_BE_EMPTY(opt, val)
             
     if(_dwavd_adm_set(adm, flag TSRMLS_CC, val) ) {
         RETURN_FALSE
@@ -3064,13 +3064,13 @@ static int _dwavd_grp_set(dwavdapi_group *grp, int flag TSRMLS_DC, zval *val) {
 
     switch(flag) {
         case DWAVD_GRP_ID:
-           DWAVD_GRP_SET_STRING(grp, id, val)     
+           DWAVD_GRP_SET_STRING(grp, id, val, 0)     
         case DWAVD_GRP_NAME:
-           DWAVD_GRP_SET_STRING(grp, name, val)
+           DWAVD_GRP_SET_STRING(grp, name, val, 1)
         case DWAVD_GRP_PARENT_ID:
-            DWAVD_GRP_SET_STRING(grp, parent_id, val)
+            DWAVD_GRP_SET_STRING(grp, parent_id, val, 0)
         case DWAVD_GRP_DESCRIPTION:
-           DWAVD_GRP_SET_STRING(grp, description, val)
+           DWAVD_GRP_SET_STRING(grp, description, val, 0)
         case DWAVD_GRP_EMAILS:
             DWAVD_EXPECTED_ARRAY_WITH_RET(val, 1)
             DWAVD_ARRAY_EMPTY_WITH_RET(Z_ARRVAL_P(val), 1)
@@ -3135,7 +3135,6 @@ PHP_FUNCTION(dwavd_grp_set) {
     }
     DWAVD_FETCH_GRP_RES_WITH_RETURN_FALSE(grp, Z_RESVAL_P(res), le_dwavd_grp, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_grpopt_array)
-    DWAVD_VALUE_CANT_BE_EMPTY(opt, val)
             
     if(_dwavd_grp_set(grp, flag TSRMLS_CC, val)) {
         RETURN_FALSE
@@ -3740,13 +3739,13 @@ static int _dwavd_trf_set(dwavdapi_group *grp, int flag TSRMLS_DC, zval *val) {
 
     switch(flag) {
         case DWAVD_TRF_ID:
-           DWAVD_GRP_SET_STRING(grp, id, val)
+           DWAVD_GRP_SET_STRING(grp, id, val, 0)
         case DWAVD_TRF_PARENT_ID:
-           DWAVD_GRP_SET_STRING(grp, parent_id, val)
+           DWAVD_GRP_SET_STRING(grp, parent_id, val, 0)
         case DWAVD_TRF_NAME:
-           DWAVD_GRP_SET_STRING(grp, name, val)
+           DWAVD_GRP_SET_STRING(grp, name, val, 1)
         case DWAVD_TRF_DESCRIPTION:
-           DWAVD_GRP_SET_STRING(grp, description, val)
+           DWAVD_GRP_SET_STRING(grp, description, val, 0)
         case DWAVD_TRF_GRACE_PERIOD:
             DWAVD_GRP_SET_LONG(grp, grace_period, val)        
     }
@@ -3771,7 +3770,6 @@ PHP_FUNCTION(dwavd_trf_set) {
 
     DWAVD_FETCH_GRP_RES_WITH_RETURN_FALSE(grp, Z_RESVAL_P(res), le_dwavd_trf, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_trfopt_array)
-    DWAVD_VALUE_CANT_BE_EMPTY(opt, val)
             
     if(_dwavd_trf_set(grp, flag TSRMLS_CC, val)) {
         RETURN_FALSE
@@ -4993,31 +4991,31 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
         case DWAVD_ST_EXPIRES:
             DWAVD_ST_SET_LONG(st, expires_time, val)
         case DWAVD_ST_CITY:
-             DWAVD_ST_SET_STRING(st, city, val)
+             DWAVD_ST_SET_STRING(st, city, val, 0)
         case DWAVD_ST_FLOOR:
-            DWAVD_ST_SET_STRING(st, floor, val)       
+            DWAVD_ST_SET_STRING(st, floor, val, 0)       
         case DWAVD_ST_PASSWORD:
-            DWAVD_ST_SET_STRING(st, password, val)
+            DWAVD_ST_SET_STRING(st, password, val, 0)
         case DWAVD_ST_DESCRIPTION:
-            DWAVD_ST_SET_STRING(st, description, val)
+            DWAVD_ST_SET_STRING(st, description, val, 0)
         case DWAVD_ST_ID:
-            DWAVD_ST_SET_STRING(st, id, val)
+            DWAVD_ST_SET_STRING(st, id, val, 0)
         case DWAVD_ST_ROOM:
-            DWAVD_ST_SET_STRING(st, room, val)
+            DWAVD_ST_SET_STRING(st, room, val, 0)
         case DWAVD_ST_NAME:
-            DWAVD_ST_SET_STRING(st, name, val)
+            DWAVD_ST_SET_STRING(st, name, val, 0)
         case DWAVD_ST_STREET:
-            DWAVD_ST_SET_STRING(st, street, val)
+            DWAVD_ST_SET_STRING(st, street, val, 0)
         case DWAVD_ST_PROVINCE:
-            DWAVD_ST_SET_STRING(st, province, val)
+            DWAVD_ST_SET_STRING(st, province, val, 0)
         case DWAVD_ST_DEPARTMENT:
-            DWAVD_ST_SET_STRING(st, department, val)
+            DWAVD_ST_SET_STRING(st, department, val, 0)
         case DWAVD_ST_TARIFF_ID:
-            DWAVD_ST_SET_STRING(st, tariff_id, val)
+            DWAVD_ST_SET_STRING(st, tariff_id, val, 0)
         case DWAVD_ST_ORGANIZATION:
-            DWAVD_ST_SET_STRING(st, organization, val)
+            DWAVD_ST_SET_STRING(st, organization, val, 0)
         case DWAVD_ST_PARENT_ID:
-            DWAVD_ST_SET_STRING(st, parent_id, val)
+            DWAVD_ST_SET_STRING(st, parent_id, val, 0)
         case DWAVD_ST_EMAILS:
             DWAVD_EXPECTED_ARRAY_WITH_RET(val, 1)
             DWAVD_ARRAY_EMPTY_WITH_RET(Z_ARRVAL_P(val), 1)
@@ -5129,7 +5127,6 @@ PHP_FUNCTION(dwavd_st_set) {
     }
     DWAVD_FETCH_ST_RES_WITH_RETURN_FALSE(st, Z_RESVAL_P(res), le_dwavd_st, rsrc_type)        
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_stopt_array)
-    DWAVD_VALUE_CANT_BE_EMPTY(opt, val)
     
     if(_dwavd_st_set(st, flag TSRMLS_CC, val)) {
         RETURN_FALSE
