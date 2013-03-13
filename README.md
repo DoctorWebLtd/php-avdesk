@@ -9,10 +9,11 @@ as easy as possible.
 Internally php-avdesk uses `dwavdapi` library to make a dialog with AV-Desk server through its XML API.
 
 
-DEPENDENCIES
+REQUIREMENTS
 ============
 
-  * Dr.Web `dwavdapi` library
+  * Dr.Web AV-Desk - http://ru.av-desk.com/support/demo/?lng=en
+  * Dr.Web `dwavdapi` library - http://download.geo.drweb.com/pub/drweb/avd/libs/libdwavdapi/
   * Dr.Web `dwavdapi` library headers (dev package)
   * PHP dev package (5.3+)
 
