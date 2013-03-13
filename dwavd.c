@@ -2615,7 +2615,6 @@ static int _dwavd_adm_set(dwavdapi_admin *adm, int flag TSRMLS_DC, zval *val) {
             DWAVD_ADM_SET_BOOL(adm, readonly, val) 
         case DWAVD_ADM_GROUPS: {
             DWAVD_EXPECTED_ARRAY_WITH_RET(val, 1)
-            DWAVD_ARRAY_EMPTY_WITH_RET(Z_ARRVAL_P(val), 1)
             for(zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(val), &pos); 
                SUCCESS == zend_hash_has_more_elements_ex(Z_ARRVAL_P(val), &pos); zend_hash_move_forward_ex(Z_ARRVAL_P(val), &pos)) {
                 array_key_type = zend_hash_get_current_key_ex(Z_ARRVAL_P(val), &array_strkey, &array_strkey_len, &array_numkey, 0, &pos);
@@ -2637,7 +2636,6 @@ static int _dwavd_adm_set(dwavdapi_admin *adm, int flag TSRMLS_DC, zval *val) {
         }
         case DWAVD_ADM_DEL_FROM_GROUPS: {
             DWAVD_EXPECTED_ARRAY_WITH_RET(val, 1)
-            DWAVD_ARRAY_EMPTY_WITH_RET(Z_ARRVAL_P(val), 1)
             for(zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(val), &pos); 
                SUCCESS == zend_hash_has_more_elements_ex(Z_ARRVAL_P(val), &pos); zend_hash_move_forward_ex(Z_ARRVAL_P(val), &pos)) {
                 array_key_type = zend_hash_get_current_key_ex(Z_ARRVAL_P(val), &array_strkey, &array_strkey_len, &array_numkey, 0, &pos);
@@ -3073,7 +3071,6 @@ static int _dwavd_grp_set(dwavdapi_group *grp, int flag TSRMLS_DC, zval *val) {
            DWAVD_GRP_SET_STRING(grp, description, val, 0)
         case DWAVD_GRP_EMAILS:
             DWAVD_EXPECTED_ARRAY_WITH_RET(val, 1)
-            DWAVD_ARRAY_EMPTY_WITH_RET(Z_ARRVAL_P(val), 1)
             for(zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(val), &pos); 
                SUCCESS == zend_hash_has_more_elements_ex(Z_ARRVAL_P(val), &pos); zend_hash_move_forward_ex(Z_ARRVAL_P(val), &pos)) {
                 array_key_type = zend_hash_get_current_key_ex(Z_ARRVAL_P(val), &array_strkey, &array_strkey_len, &array_numkey, 0, &pos);
@@ -3094,7 +3091,6 @@ static int _dwavd_grp_set(dwavdapi_group *grp, int flag TSRMLS_DC, zval *val) {
             return 0;
         case DWAVD_GRP_DEL_EMAILS:
             DWAVD_EXPECTED_ARRAY_WITH_RET(val, 1)
-            DWAVD_ARRAY_EMPTY_WITH_RET(Z_ARRVAL_P(val), 1)
             for(zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(val), &pos); 
                SUCCESS == zend_hash_has_more_elements_ex(Z_ARRVAL_P(val), &pos); zend_hash_move_forward_ex(Z_ARRVAL_P(val), &pos)) {
                 array_key_type = zend_hash_get_current_key_ex(Z_ARRVAL_P(val), &array_strkey, &array_strkey_len, &array_numkey, 0, &pos);
@@ -5018,7 +5014,6 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
             DWAVD_ST_SET_STRING(st, parent_id, val, 0)
         case DWAVD_ST_EMAILS:
             DWAVD_EXPECTED_ARRAY_WITH_RET(val, 1)
-            DWAVD_ARRAY_EMPTY_WITH_RET(Z_ARRVAL_P(val), 1)
             for(zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(val), &pos); 
                SUCCESS == zend_hash_has_more_elements_ex(Z_ARRVAL_P(val), &pos); zend_hash_move_forward_ex(Z_ARRVAL_P(val), &pos)) {
                 array_key_type = zend_hash_get_current_key_ex(Z_ARRVAL_P(val), &array_strkey, &array_strkey_len, &array_numkey, 0, &pos);
@@ -5039,7 +5034,6 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
             return 0;
         case DWAVD_ST_DEL_EMAILS:
             DWAVD_EXPECTED_ARRAY_WITH_RET(val, 1)
-            DWAVD_ARRAY_EMPTY_WITH_RET(Z_ARRVAL_P(val), 1)
             for(zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(val), &pos); 
                SUCCESS == zend_hash_has_more_elements_ex(Z_ARRVAL_P(val), &pos); zend_hash_move_forward_ex(Z_ARRVAL_P(val), &pos)) {
                 array_key_type = zend_hash_get_current_key_ex(Z_ARRVAL_P(val), &array_strkey, &array_strkey_len, &array_numkey, 0, &pos);
@@ -5060,7 +5054,6 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
             return 0;
         case DWAVD_ST_GROUPS:
             DWAVD_EXPECTED_ARRAY_WITH_RET(val, 1)
-            DWAVD_ARRAY_EMPTY_WITH_RET(Z_ARRVAL_P(val), 1)
             for(zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(val), &pos); 
                SUCCESS == zend_hash_has_more_elements_ex(Z_ARRVAL_P(val), &pos); zend_hash_move_forward_ex(Z_ARRVAL_P(val), &pos)) {
                 array_key_type = zend_hash_get_current_key_ex(Z_ARRVAL_P(val), &array_strkey, &array_strkey_len, &array_numkey, 0, &pos);
