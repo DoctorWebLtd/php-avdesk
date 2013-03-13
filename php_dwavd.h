@@ -886,13 +886,13 @@ enum {
 
 #define DWAVD_ARRAY_EMPTY(arr) \
         if(0 == zend_hash_num_elements(arr)) { \
-                _dwavd_error(E_WARNING, "Array not contains any elements"); \
+                _dwavd_error(E_WARNING, "Array does not contain elements"); \
                 RETURN_FALSE \
         }
 
 #define DWAVD_ARRAY_EMPTY_WITH_RET(arr, ret) \
         if(0 == zend_hash_num_elements(arr)) { \
-                _dwavd_error(E_WARNING, "Array not contains any elements"); \
+                _dwavd_error(E_WARNING, "Array does not contain elements"); \
                 return ret; \
         }
 
