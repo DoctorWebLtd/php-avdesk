@@ -19,14 +19,16 @@
 #include <Zend/zend.h>
 #include <Zend/zend_globals.h>
 #include <Zend/zend_API.h>
+#include <TSRM/TSRM.h>
 
 void _dwavd_error(int type, const char *format, ...) {
+	TSRMLS_FETCH();
     char buff[1024];
     char *space = NULL;
     char *class_name = NULL;
     va_list args;
     
-    class_name = get_active_class_name(&space TSRMLS_CC);
+    class_name = (char *)get_active_class_name(&space TSRMLS_CC);
     snprintf(&buff[0], sizeof (buff) - 1, "%s%s%s(): ", class_name, space, get_active_function_name(TSRMLS_C));
     
     va_start(args, format);
