@@ -1,0 +1,11 @@
+ARG_WITH("dwavd", "Dr.Web AV-Desk support", "no");
+
+if (PHP_DWAVD != "no") {
+	if (CHECK_LIB("dwavdapi.lib", "dwavd", PHP_DWAVD) &&
+		CHECK_HEADER_ADD_INCLUDE("dwavdapi/avdesk.h", "CFLAGS_DWAVD")) {
+		EXTENSION("dwavd", "dwavd.c php_utils.c");
+	} else {
+		WARNING("dwavd not enabled; libraries and headers not found");
+	}
+
+}
