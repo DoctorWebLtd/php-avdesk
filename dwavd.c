@@ -1017,6 +1017,14 @@ static void _dwavd_infcd_obj_array(zval **php_array, const dwavdapi_infected_obj
     *php_array = array;
 }
 
+static void _dwavd_globals_init(zend_dwavd_globals *dwavd_globals) {
+    dwavd_globals->avdesk_port = 0;
+    dwavd_globals->avdesk_host = NULL;
+    dwavd_globals->avdesk_login = NULL;
+    dwavd_globals->avdesk_password = NULL;
+    dwavd_globals->avdesk_crt = NULL;
+}
+
 
 /** ======= Basics ======= */
 
@@ -1183,6 +1191,8 @@ ZEND_GET_MODULE(dwavd)
 /** ======= Constants ======= */
 
 PHP_MINIT_FUNCTION(dwavd) {
+    ZEND_INIT_MODULE_GLOBALS(dwavd, _dwavd_globals_init, NULL);
+    
     REGISTER_LONG_CONSTANT("DWAVD_DWAVDAPI_INFECTED_FILE", DWAVDAPI_INFECTED_FILE, CONST_CS | CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("DWAVD_DWAVDAPI_VIRUS_MODIFICATION_PROGRAM", DWAVDAPI_VIRUS_MODIFICATION_PROGRAM, CONST_CS | CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("DWAVD_DWAVDAPI_UNKNOWN_VIRUS_PROGRAM", DWAVDAPI_UNKNOWN_VIRUS_PROGRAM, CONST_CS | CONST_PERSISTENT);
