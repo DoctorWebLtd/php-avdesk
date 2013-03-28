@@ -26,6 +26,7 @@
 #include <Zend/zend.h>
 #include <Zend/zend_globals.h>
 #include <Zend/zend_API.h>
+#include <ext/standard/info.h>
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -3640,7 +3641,7 @@ PHP_FUNCTION(dwavd_trf) {
     int flag = -1;
     zval *res = NULL;
     zval *opt = NULL;
-    zval *array = NULL;;
+    zval *array = NULL;
     dwavdapi_group *grp = NULL;
     dwavdapi_list *list = NULL;
     dwavdapi_list *n_list = NULL;
@@ -5699,11 +5700,11 @@ PHP_FUNCTION(dwavd_stats_traffic) {
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_traffic_opt_array)
     switch(flag) {
         case DWAVD_TRAFFIC_IN:
-            RETURN_LONG(dwavdapi_srv_traffic_in(traffic));
+            RETURN_DOUBLE(dwavdapi_srv_traffic_in(traffic));
         case DWAVD_TRAFFIC_OUT:
-            RETURN_LONG(dwavdapi_srv_traffic_out(traffic));
+            RETURN_DOUBLE(dwavdapi_srv_traffic_out(traffic));
         case DWAVD_TRAFFIC_TOTAL:
-            RETURN_LONG(dwavdapi_srv_traffic_total(traffic));            
+            RETURN_DOUBLE(dwavdapi_srv_traffic_total(traffic));            
     }
     DWAVD_UNKNOWN_OPTION(opt)
 }
