@@ -757,11 +757,11 @@ enum {
         } while(0);
 
 #define DWAVD_ADM_SET_STRING(res, lower_name, value, required) \
-	if(Z_TYPE_P(val) != IS_STRING && Z_TYPE_P(val) != IS_NULL) { \
-	     _dwavd_error(E_WARNING, "Expected string, got %s", _dwavd_var_type(val)); \
+	if(Z_TYPE_P(value) != IS_STRING && Z_TYPE_P(value) != IS_NULL) { \
+	     _dwavd_error(E_WARNING, "Expected string, got %s", _dwavd_var_type(value)); \
               return 1; \
         } \
-        if(Z_TYPE_P(val) == IS_NULL || (Z_TYPE_P(val) == IS_STRING && Z_STRLEN_P(val) == 0)) { \
+        if(Z_TYPE_P(value) == IS_NULL || (Z_TYPE_P(value) == IS_STRING && Z_STRLEN_P(value) == 0)) { \
     	    if(!required ) { \
         	if(DWAVDAPI_SUCCESS == dwavdapi_admin_set_##lower_name(res, NULL)) { \
         	    return 0; \
@@ -771,7 +771,7 @@ enum {
     		_dwavd_error(E_WARNING, "'%s' value can't be empty", #lower_name); \
                return 1; \
     	    } \
-        } else if(Z_TYPE_P(val) == IS_STRING) { \
+        } else if(Z_TYPE_P(value) == IS_STRING) { \
                 if(DWAVDAPI_SUCCESS == dwavdapi_admin_set_##lower_name(res, Z_STRVAL_P(value))) { \
                        return 0; \
                 } \
@@ -779,28 +779,28 @@ enum {
         } 
 
 #define DWAVD_ADM_SET_BOOL(res, lower_name, value) \
-        if(Z_TYPE_P(val) == IS_NULL) { \
+        if(Z_TYPE_P(value) == IS_NULL) { \
                 if(DWAVDAPI_SUCCESS == dwavdapi_admin_set_##lower_name(res, 0)) { \
                         return 0; \
                 } \
                 return 1; \
-        } else if (Z_TYPE_P(val) == IS_BOOL || Z_TYPE_P(val) == IS_LONG) { \
-                convert_to_ex_master(&val, long, LONG) \
-                if(DWAVDAPI_SUCCESS == dwavdapi_admin_set_##lower_name(res, Z_LVAL_P(value))) { \
+        } else if (Z_TYPE_P(value) == IS_BOOL || Z_TYPE_P(value) == IS_LONG) { \
+                convert_to_ex_master(&value, boolean, BOOL) \
+                if(DWAVDAPI_SUCCESS == dwavdapi_admin_set_##lower_name(res, Z_BVAL_P(value))) { \
                         return 0; \
                 } \
                 return 1; \
         } else {\
-                _dwavd_error(E_WARNING, "Expected integer, got %s", _dwavd_var_type(val)); \
+                _dwavd_error(E_WARNING, "Expected integer, got %s", _dwavd_var_type(value)); \
                return 1; \
         }
 
 #define DWAVD_GRP_SET_STRING(res, lower_name, value, required) \
-        if(Z_TYPE_P(val) != IS_STRING && Z_TYPE_P(val) != IS_NULL) { \
-	     _dwavd_error(E_WARNING, "Expected string, got %s", _dwavd_var_type(val)); \
+        if(Z_TYPE_P(value) != IS_STRING && Z_TYPE_P(value) != IS_NULL) { \
+	     _dwavd_error(E_WARNING, "Expected string, got %s", _dwavd_var_type(value)); \
               return 1; \
         } \
-        if(Z_TYPE_P(val) == IS_NULL || (Z_TYPE_P(val) == IS_STRING && Z_STRLEN_P(val) == 0)) { \
+        if(Z_TYPE_P(value) == IS_NULL || (Z_TYPE_P(value) == IS_STRING && Z_STRLEN_P(value) == 0)) { \
     	    if(!required ) { \
         	if(DWAVDAPI_SUCCESS == dwavdapi_group_set_##lower_name(res, NULL)) { \
         	    return 0; \
@@ -810,7 +810,7 @@ enum {
     		_dwavd_error(E_WARNING, "'%s' value can't be empty", #lower_name); \
                return 1; \
     	    } \
-        } else if(Z_TYPE_P(val) == IS_STRING) { \
+        } else if(Z_TYPE_P(value) == IS_STRING) { \
                 if(DWAVDAPI_SUCCESS == dwavdapi_group_set_##lower_name(res, Z_STRVAL_P(value))) { \
                        return 0; \
                 } \
@@ -818,28 +818,27 @@ enum {
         } 
 
 #define DWAVD_GRP_SET_LONG(res, lower_name, value) \
-        if(Z_TYPE_P(val) == IS_NULL) { \
+        if(Z_TYPE_P(value) == IS_NULL) { \
                 if(DWAVDAPI_SUCCESS == dwavdapi_group_set_##lower_name(res, 0)) { \
                         return 0; \
                 } \
                 return 1; \
-        } else if (Z_TYPE_P(val) == IS_LONG) { \
-                convert_to_ex_master(&val, long, LONG) \
+        } else if (Z_TYPE_P(value) == IS_LONG) { \
                 if(DWAVDAPI_SUCCESS == dwavdapi_group_set_##lower_name(res, Z_LVAL_P(value))) { \
                         return 0; \
                 } \
                 return 1; \
         } else {\
-                _dwavd_error(E_WARNING, "Expected integer, got %s", _dwavd_var_type(val)); \
+                _dwavd_error(E_WARNING, "Expected integer, got %s", _dwavd_var_type(value)); \
                return 1; \
         }
 
 #define DWAVD_ST_SET_STRING(res, lower_name, value, required) \
-        if(Z_TYPE_P(val) != IS_STRING && Z_TYPE_P(val) != IS_NULL) { \
+        if(Z_TYPE_P(value) != IS_STRING && Z_TYPE_P(value) != IS_NULL) { \
 	     _dwavd_error(E_WARNING, "Expected string, got %s", _dwavd_var_type(val)); \
               return 1; \
         } \
-        if(Z_TYPE_P(val) == IS_NULL || (Z_TYPE_P(val) == IS_STRING && Z_STRLEN_P(val) == 0)) { \
+        if(Z_TYPE_P(value) == IS_NULL || (Z_TYPE_P(value) == IS_STRING && Z_STRLEN_P(value) == 0)) { \
     	    if(!required ) { \
         	if(DWAVDAPI_SUCCESS == dwavdapi_station_set_##lower_name(res, NULL)) { \
         	    return 0; \
@@ -857,18 +856,18 @@ enum {
         } 
 
 #define DWAVD_ST_SET_LONG(res, lower_name, value) \
-        if(Z_TYPE_P(val) == IS_NULL) { \
+        if(Z_TYPE_P(value) == IS_NULL) { \
                 if(DWAVDAPI_SUCCESS == dwavdapi_station_set_##lower_name(res, 0)) { \
                         return 0; \
                 } \
                 return 1; \
-        } else if(Z_TYPE_P(val) == IS_LONG) { \
+        } else if(Z_TYPE_P(value) == IS_LONG) { \
                 if(DWAVDAPI_SUCCESS == dwavdapi_station_set_##lower_name(res, Z_LVAL_P(value))) { \
                         return 0; \
                 } \
                 return 1; \
         } else {\
-                _dwavd_error(E_WARNING, "Expected integer, got %s", _dwavd_var_type(val)); \
+                _dwavd_error(E_WARNING, "Expected integer, got %s", _dwavd_var_type(value)); \
                return 1; \
         }
 
