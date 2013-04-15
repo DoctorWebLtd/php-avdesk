@@ -4999,11 +4999,11 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
             DWAVD_ST_SET_LONG(st, latitude, val)
         case DWAVD_ST_EXPIRES:
             if(Z_TYPE_P(val) == IS_NULL) { 
-                if(DWAVDAPI_SUCCESS == dwavdapi_station_set_expires_time(st, 0,)) { 
+                if(DWAVDAPI_SUCCESS == dwavdapi_station_set_expires_time(st, 0)) { 
                     return 0;
                 } 
              } else if(Z_TYPE_P(val) == IS_LONG) { 
-                if(DWAVDAPI_SUCCESS == dwavdapi_station_set_block_time(st, Z_LVAL_P(val)) { 
+                if(DWAVDAPI_SUCCESS == dwavdapi_station_set_expires_time(st, Z_LVAL_P(val))) { 
                     return 0; 
                 } 
              } else {
