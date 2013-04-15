@@ -4988,7 +4988,7 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
                    return 1;
                 }
             } else {
-                _dwavd_error(E_WARNING, "");
+                _dwavd_error(E_WARNING, "Incorrect country code");
                 return 1;
             }
             return 0;
