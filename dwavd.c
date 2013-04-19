@@ -4999,7 +4999,7 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
             DWAVD_ST_SET_LONG(st, latitude, val)
         case DWAVD_ST_EXPIRES:
             if(Z_TYPE_P(val) == IS_NULL) { 
-                if(DWAVDAPI_SUCCESS == dwavdapi_station_set_expires_time(st, 0)) { 
+                if(DWAVDAPI_SUCCESS == dwavdapi_station_set_expires_time(st, DWAVDAPI_RESET)) { 
                     return 0;
                 } 
              } else if(Z_TYPE_P(val) == IS_LONG) { 
@@ -5100,7 +5100,7 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
             return 0;
         case DWAVD_ST_BLOCK_BEGINS:
             if(Z_TYPE_P(val) == IS_NULL) { 
-                if(DWAVDAPI_SUCCESS == dwavdapi_station_set_block_time(st, 0, -1)) { 
+                if(DWAVDAPI_SUCCESS == dwavdapi_station_set_block_time(st, DWAVDAPI_RESET, -1)) { 
                     return 0;
                 } 
              } else if(Z_TYPE_P(val) == IS_LONG) { 
@@ -5113,7 +5113,7 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
             }
         case DWAVD_ST_BLOCK_ENDS:
             if(Z_TYPE_P(val) == IS_NULL) { 
-                if(DWAVDAPI_SUCCESS == dwavdapi_station_set_block_time(st, -1, 0)) { 
+                if(DWAVDAPI_SUCCESS == dwavdapi_station_set_block_time(st, -1, DWAVDAPI_RESET)) { 
                     return 0;
                 } 
              } else if(Z_TYPE_P(val) == IS_LONG) { 
