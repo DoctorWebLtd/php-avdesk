@@ -1,8 +1,8 @@
 dnl config.m4 for extension dwavdapi
 
-PHP_ARG_WITH(dwavd, for Dr.Web AV-Desk support, [  --with-dwavdapi=[DIR]     Include Dr.Web AV-Desk support])
+PHP_ARG_WITH(dwavd, for Dr.Web AV-Desk support, [  --with-dwavd=[DIR]     Include Dr.Web AV-Desk support])
 
-if test "$PHP_AVDESK" != "no"; then
+if test "$PHP_DWAVD" != "no"; then
   dnl checking PHP version
   PHP_CONFIG="php-config"
   AC_MSG_CHECKING(for PHP 5.3.0 or greater)
