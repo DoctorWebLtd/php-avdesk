@@ -3,16 +3,25 @@ dnl config.m4 for extension dwavdapi
 PHP_ARG_WITH(dwavd, for Dr.Web AV-Desk support, [  --with-dwavd=[DIR]     Include Dr.Web AV-Desk support])
 
 if test "$PHP_DWAVD" != "no"; then
-  dnl checking PHP version
-  PHP_CONFIG="php-config"
-  AC_MSG_CHECKING(for PHP 5.3.0 or greater)
-  
-  PHP_VER_NUM=`$PHP_CONFIG --vernum`
-  if test "$PHP_VER_NUM" -ge 50300; then
-    AC_MSG_RESULT($PHP_VER_NUM)
-  else
-    AC_MSG_ERROR(PHP version 5.3.0 or later is required)
-  fi
+    AC_MSG_CHECKING(for PHP 5.3.0 or greater)
+
+    PHP_VER_NUM=0
+
+    if test -z "$PHP_MAJOR_VERION"; then
+        PHP_CONFIG=`which php-config`
+	if test -z "$PHP_CONFIG"; then
+    	     AC_MSG_ERROR(unable to check PHP version because php-config not found)
+        fi
+	PHP_VER_NUM=`$PHP_CONFIG --vernum`
+    else
+	PHP_NUM_VERSION=`expr [$]PHP_MAJOR_VERSION \* 10000 + [$]PHP_MINOR_VERSION \* 100 + [$]PHP_RELEASE_VERSION`
+    fi
+
+    if test "$PHP_VER_NUM" -ge 50300; then
+	AC_MSG_RESULT($PHP_VER_NUM)
+    else
+	AC_MSG_ERROR(PHP version 5.3.0 or later is required)
+    fi
   
   dnl checking header file
   SEARCH_HEADERS_PATH="/usr/local /usr /opt/local"     
