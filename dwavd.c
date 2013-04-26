@@ -1866,7 +1866,7 @@ PHP_FUNCTION(dwavd_set_login) {
         _dwavd_error(E_WARNING, "Login is not specified");
         RETURN_FALSE
     }
-    if(DWAVDAPI_FAILURE == dwavdapi_set_srv_host(handle, value) ){
+    if(DWAVDAPI_FAILURE == dwavdapi_set_srv_login(handle, value) ){
         RETURN_FALSE
     }
     RETURN_TRUE
