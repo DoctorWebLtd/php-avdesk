@@ -21,23 +21,6 @@
 #include <Zend/zend_API.h>
 #include <TSRM/TSRM.h>
 
-void _dwavd_error(int type, const char *format, ...) {
-	TSRMLS_FETCH();
-    char buff[1024];
-    char *space = NULL;
-    char *class_name = NULL;
-    va_list args;
-    
-    class_name = (char *)get_active_class_name(&space TSRMLS_CC);
-    snprintf(&buff[0], sizeof (buff) - 1, "%s%s%s(): ", class_name, space, get_active_function_name(TSRMLS_C));
-    
-    va_start(args, format);
-    vsnprintf(&buff[strlen(buff)], sizeof(buff)-strlen(buff)-1, format, args);
-    va_end(args);
-    
-    zend_error(type, "%s", buff);
-}
-
 void _dwavd_carray_to_phparray(zval **php_array, const char **carray, unsigned int carray_size) {
     unsigned int i = 0;
     zval *array = NULL;

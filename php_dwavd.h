@@ -488,7 +488,7 @@ enum {
 #define DWAVD_UNKNOWN_OPTION(opt) \
         do { \
            convert_to_string(opt) \
-           _dwavd_error(E_WARNING, "Unknown option: `%s'", Z_STRVAL_P(opt)); \
+           php_error_docref(NULL TSRMLS_CC, E_WARNING, "Unknown option: `%s'", Z_STRVAL_P(opt)); \
            RETURN_FALSE \
         } while(0);
         
@@ -521,7 +521,7 @@ enum {
 
 #define DWAVD_CHECK_PARAM_COUNT(count) \
     if(count < ZEND_NUM_ARGS() || count > ZEND_NUM_ARGS()) { \
-        _dwavd_error(E_WARNING, "Expects exactly %d parameters, %d given", count, ZEND_NUM_ARGS()); \
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expects exactly %d parameters, %d given", count, ZEND_NUM_ARGS()); \
     }
       
 #define DWAVD_FETCH_SRV_RES_WITH_RETURN_FALSE(res, res_id, res_type, res_found_type) \
@@ -745,20 +745,20 @@ enum {
             if(Z_TYPE_P(opt) == IS_STRING) { \
                 fl = _dwavd_opt_to_flag(Z_STRVAL_P(opt), arr, sizeof(arr)/sizeof(arr[0])); \
                 if(-1 == fl) { \
-                   _dwavd_error(E_WARNING, "Unknown option: `%s'", Z_STRVAL_P(opt)); \
+                   php_error_docref(NULL TSRMLS_CC, E_WARNING, "Unknown option: `%s'", Z_STRVAL_P(opt)); \
                    RETURN_FALSE \
                 }\
             } else if (Z_TYPE_P(opt) == IS_LONG) { \
                fl = Z_LVAL_P(opt); \
             } else { \
-               _dwavd_error(E_WARNING, "Expected string or number, got %s", _dwavd_var_type(opt));\
+               php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected string or number, got %s", _dwavd_var_type(opt));\
                RETURN_FALSE \
             } \
         } while(0);
 
 #define DWAVD_ADM_SET_STRING(res, lower_name, value, required) \
 	if(Z_TYPE_P(value) != IS_STRING && Z_TYPE_P(value) != IS_NULL) { \
-	     _dwavd_error(E_WARNING, "Expected string, got %s", _dwavd_var_type(value)); \
+	     php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected string, got %s", _dwavd_var_type(value)); \
               return 1; \
         } \
         if(Z_TYPE_P(value) == IS_NULL || (Z_TYPE_P(value) == IS_STRING && Z_STRLEN_P(value) == 0)) { \
@@ -768,7 +768,7 @@ enum {
         	} \
         	return 1; \
     	    } else { \
-    		_dwavd_error(E_WARNING, "'%s' value can't be empty", #lower_name); \
+    		php_error_docref(NULL TSRMLS_CC, E_WARNING, "'%s' value can't be empty", #lower_name); \
                return 1; \
     	    } \
         } else if(Z_TYPE_P(value) == IS_STRING) { \
@@ -791,13 +791,13 @@ enum {
                 } \
                 return 1; \
         } else {\
-                _dwavd_error(E_WARNING, "Expected integer, got %s", _dwavd_var_type(value)); \
+                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected integer, got %s", _dwavd_var_type(value)); \
                return 1; \
         }
 
 #define DWAVD_GRP_SET_STRING(res, lower_name, value, required) \
         if(Z_TYPE_P(value) != IS_STRING && Z_TYPE_P(value) != IS_NULL) { \
-	     _dwavd_error(E_WARNING, "Expected string, got %s", _dwavd_var_type(value)); \
+	     php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected string, got %s", _dwavd_var_type(value)); \
               return 1; \
         } \
         if(Z_TYPE_P(value) == IS_NULL || (Z_TYPE_P(value) == IS_STRING && Z_STRLEN_P(value) == 0)) { \
@@ -807,7 +807,7 @@ enum {
         	} \
         	return 1; \
     	    } else { \
-    		_dwavd_error(E_WARNING, "'%s' value can't be empty", #lower_name); \
+    		php_error_docref(NULL TSRMLS_CC, E_WARNING, "'%s' value can't be empty", #lower_name); \
                return 1; \
     	    } \
         } else if(Z_TYPE_P(value) == IS_STRING) { \
@@ -829,13 +829,13 @@ enum {
                 } \
                 return 1; \
         } else {\
-                _dwavd_error(E_WARNING, "Expected integer, got %s", _dwavd_var_type(value)); \
+                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected integer, got %s", _dwavd_var_type(value)); \
                return 1; \
         }
 
 #define DWAVD_ST_SET_STRING(res, lower_name, value, required) \
         if(Z_TYPE_P(value) != IS_STRING && Z_TYPE_P(value) != IS_NULL) { \
-	     _dwavd_error(E_WARNING, "Expected string, got %s", _dwavd_var_type(val)); \
+	     php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected string, got %s", _dwavd_var_type(val)); \
               return 1; \
         } \
         if(Z_TYPE_P(value) == IS_NULL || (Z_TYPE_P(value) == IS_STRING && Z_STRLEN_P(value) == 0)) { \
@@ -845,7 +845,7 @@ enum {
         	} \
         	return 1; \
     	    } else { \
-    		_dwavd_error(E_WARNING, "'%s' value can't be empty", #lower_name); \
+    		php_error_docref(NULL TSRMLS_CC, E_WARNING, "'%s' value can't be empty", #lower_name); \
                return 1; \
     	    } \
         } else if(Z_TYPE_P(val) == IS_STRING) { \
@@ -867,37 +867,37 @@ enum {
                 } \
                 return 1; \
         } else {\
-                _dwavd_error(E_WARNING, "Expected integer, got %s", _dwavd_var_type(value)); \
+                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected integer, got %s", _dwavd_var_type(value)); \
                return 1; \
         }
 
 #define DWAVD_EXPECTED_ARRAY(val) \
         if(Z_TYPE_P(val) != IS_ARRAY) {\
-                _dwavd_error(E_WARNING, "Excepted array, got %s", _dwavd_var_type(val)); \
+                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Excepted array, got %s", _dwavd_var_type(val)); \
                 RETURN_FALSE \
         }
 
 #define DWAVD_EXPECTED_ARRAY_WITH_RET(val, ret) \
         if(Z_TYPE_P(val) != IS_ARRAY) {\
-                _dwavd_error(E_WARNING, "Excepted array, got %s", _dwavd_var_type(val)); \
+                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Excepted array, got %s", _dwavd_var_type(val)); \
                 return ret; \
         }
 
 #define DWAVD_ARRAY_EMPTY(arr) \
         if(0 == zend_hash_num_elements(arr)) { \
-                _dwavd_error(E_WARNING, "Array does not contain elements"); \
+                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Array does not contain elements"); \
                 RETURN_FALSE \
         }
 
 #define DWAVD_ARRAY_EMPTY_WITH_RET(arr, ret) \
         if(0 == zend_hash_num_elements(arr)) { \
-                _dwavd_error(E_WARNING, "Array does not contain elements"); \
+                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Array does not contain elements"); \
                 return ret; \
         }
 
 #define DWAVD_CHECK_TIME(t, name) \
     if(0 > t) { \
-        _dwavd_error(E_WARNING, "Incorrect time value of argument `%s'", #name); \
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Incorrect time value of argument `%s'", #name); \
         RETURN_NULL(); \
     } \
                 

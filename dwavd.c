@@ -1689,7 +1689,7 @@ PHP_FUNCTION(dwavd_init) {
     handle = dwavdapi_init();
     if (NULL == handle) {
         dwavdapi_strerror(&error, errno);
-        _dwavd_error(E_ERROR, "Unable to initialize connection resource: %s (%d)", error, errno);
+        php_error_docref(NULL TSRMLS_CC, E_ERROR, "Unable to initialize connection resource: %s (%d)", error, errno);
         if (error) {
             free(error);
             error = NULL;
@@ -1697,25 +1697,25 @@ PHP_FUNCTION(dwavd_init) {
         RETURN_NULL();
     }
     if (host_len == 0) {
-        _dwavd_error(E_WARNING, "Host is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Host is not specified");
         RETURN_NULL();
     }
     if (login_len == 0) {
-        _dwavd_error(E_WARNING, "Login is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Login is not specified");
         RETURN_NULL();
     }
     if (pwd_len == 0) {
-        _dwavd_error(E_WARNING, "Password is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Password is not specified");
         RETURN_NULL();
     }
     if (port <= 0 || port > 65535) {
-        _dwavd_error(E_WARNING, "Incorrect port is specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Incorrect port is specified");
         RETURN_NULL();
     }
         
     if (DWAVDAPI_FAILURE == dwavdapi_set_connect_info(handle, host, port, login, pwd)) {
         dwavdapi_strerror(&error, errno);
-        _dwavd_error(E_ERROR, "Unable to set connection parameters: %s (%d)", error, errno);
+        php_error_docref(NULL TSRMLS_CC, E_ERROR, "Unable to set connection parameters: %s (%d)", error, errno);
         if (NULL != error) {
             free(error);
             error = NULL;
@@ -1813,7 +1813,7 @@ PHP_FUNCTION(dwavd_set_port) {
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
     if (port <= 0 || port > 65535) {
-        _dwavd_error(E_WARNING, "Incorrect port specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Incorrect port specified");
         RETURN_FALSE
     }
     if(DWAVDAPI_FAILURE == dwavdapi_set_srv_port(handle, port) ){
@@ -1839,7 +1839,7 @@ PHP_FUNCTION(dwavd_set_host) {
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
     if (value_len == 0) {
-        _dwavd_error(E_WARNING, "Host is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Host is not specified");
         RETURN_FALSE
     }
     if(DWAVDAPI_FAILURE == dwavdapi_set_srv_host(handle, value) ){
@@ -1865,7 +1865,7 @@ PHP_FUNCTION(dwavd_set_login) {
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
     if (value_len == 0) {
-        _dwavd_error(E_WARNING, "Login is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Login is not specified");
         RETURN_FALSE
     }
     if(DWAVDAPI_FAILURE == dwavdapi_set_srv_login(handle, value) ){
@@ -1891,7 +1891,7 @@ PHP_FUNCTION(dwavd_set_password) {
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
     if (value_len == 0) {
-        _dwavd_error(E_WARNING, "Password is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Password is not specified");
         RETURN_FALSE
     }
     if(DWAVDAPI_FAILURE == dwavdapi_set_srv_password(handle, value) ){
@@ -1916,7 +1916,7 @@ PHP_FUNCTION(dwavd_set_timeout) {
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
     if (timeout <= 1) {
-        _dwavd_error(E_WARNING, "Incorrect timeout is specified. Only greater than 1 values are accepted");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Incorrect timeout is specified. Only greater than 1 values are accepted");
         RETURN_FALSE
     }
     dwavdapi_set_connect_timeout(handle, timeout);
@@ -2046,7 +2046,7 @@ PHP_FUNCTION(dwavd_srv) {
     } else if (Z_TYPE_P(opt) == IS_LONG) {
         flag = Z_LVAL_P(opt);
     } else {
-        _dwavd_error(E_WARNING, "Expected string or number, got %s", _dwavd_var_type(opt));
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected string or number, got %s", _dwavd_var_type(opt));
         RETURN_FALSE
     } 
     
@@ -2145,7 +2145,7 @@ PHP_FUNCTION(dwavd_srv_get_stats) {
     DWAVD_CHECK_TIME(till, till)
             
     if(0 > top_viruses) {
-        _dwavd_error(E_WARNING, "Positive number is expected for `top_viruses' argument.");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Positive number is expected for `top_viruses' argument.");
         RETURN_NULL();
     }
             
@@ -2401,7 +2401,7 @@ PHP_FUNCTION(dwavd_srv_run_task) {
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
             
     if (0 == id_len) {
-        _dwavd_error(E_WARNING, "Task ID is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Task ID is not specified");
         RETURN_FALSE
     }
 
@@ -2457,7 +2457,7 @@ PHP_FUNCTION(dwavd_adm_init) {
     adm = dwavdapi_admin_init();
     if (NULL == adm) {
         dwavdapi_strerror(&error, errno);
-        _dwavd_error(E_ERROR, "Cannot initialize resource: %s (%d)", error, errno);
+        php_error_docref(NULL TSRMLS_CC, E_ERROR, "Cannot initialize resource: %s (%d)", error, errno);
         if (error) {
             free(error);
             error = NULL;
@@ -2484,7 +2484,7 @@ PHP_FUNCTION(dwavd_adm_get_info) {
     }    
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)    
     if(0 == login_len) {
-        _dwavd_error(E_WARNING, "Administrator login is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Administrator login is not specified");
         RETURN_NULL();
     }            
     if (DWAVDAPI_FAILURE == dwavdapi_admin_get_info(handle, &adm, login)) {
@@ -2634,12 +2634,12 @@ static int _dwavd_adm_set(dwavdapi_admin *adm, int flag TSRMLS_DC, zval *val) {
                SUCCESS == zend_hash_has_more_elements_ex(Z_ARRVAL_P(val), &pos); zend_hash_move_forward_ex(Z_ARRVAL_P(val), &pos)) {
                 array_key_type = zend_hash_get_current_key_ex(Z_ARRVAL_P(val), &array_strkey, &array_strkey_len, &array_numkey, 0, &pos);
                 if(HASH_KEY_IS_LONG != array_key_type) {
-                    _dwavd_error(E_WARNING, "Key of array must be integer, got `%s'", _dwavd_var_type(*array_item));
+                    php_error_docref(NULL TSRMLS_CC, E_WARNING, "Key of array must be integer, got `%s'", _dwavd_var_type(*array_item));
                     return 1;
                 }
                 if(SUCCESS == zend_hash_get_current_data_ex(Z_ARRVAL_P(val), (void**)&array_item, &pos)){
                     if(Z_TYPE_PP(array_item) != IS_STRING) {
-                        _dwavd_error(E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
+                        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
                         return 1;
                     }
                     if(DWAVDAPI_SUCCESS == dwavdapi_admin_add_to_group(adm, Z_STRVAL_PP(array_item))) {
@@ -2655,12 +2655,12 @@ static int _dwavd_adm_set(dwavdapi_admin *adm, int flag TSRMLS_DC, zval *val) {
                SUCCESS == zend_hash_has_more_elements_ex(Z_ARRVAL_P(val), &pos); zend_hash_move_forward_ex(Z_ARRVAL_P(val), &pos)) {
                 array_key_type = zend_hash_get_current_key_ex(Z_ARRVAL_P(val), &array_strkey, &array_strkey_len, &array_numkey, 0, &pos);
                 if(HASH_KEY_IS_LONG != array_key_type) {
-                    _dwavd_error(E_WARNING, "Key of array must be integer, got `%s'", _dwavd_var_type(*array_item));
+                    php_error_docref(NULL TSRMLS_CC, E_WARNING, "Key of array must be integer, got `%s'", _dwavd_var_type(*array_item));
                     return 1;
                 }
                 if(SUCCESS == zend_hash_get_current_data_ex(Z_ARRVAL_P(val), (void**)&array_item, &pos)){
                     if(Z_TYPE_PP(array_item) != IS_STRING) {
-                        _dwavd_error(E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
+                        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
                         return 1;
                     }
                     if(DWAVDAPI_SUCCESS == dwavdapi_admin_delete_from_group(adm, Z_STRVAL_PP(array_item))) {
@@ -2731,7 +2731,7 @@ PHP_FUNCTION(dwavd_adm_set_array) {
             if(array_key_type == HASH_KEY_IS_STRING) {
                 flag = _dwavd_opt_to_flag(array_strkey, _dwavd_admopt_array, sizeof(_dwavd_admopt_array)/sizeof(_dwavd_admopt_array[0]));
                 if(-1 == flag) {
-                    _dwavd_error(E_WARNING, "Unknown option: `%s'", array_strkey);
+                    php_error_docref(NULL TSRMLS_CC, E_WARNING, "Unknown option: `%s'", array_strkey);
                     RETURN_FALSE
                 }
             } else {
@@ -2820,7 +2820,7 @@ PHP_FUNCTION(dwavd_adm_delete) {
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)    
     if(0 == login_len) {
-        _dwavd_error(E_WARNING, "Administrator login is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Administrator login is not specified");
         RETURN_FALSE
     }            
     if (DWAVDAPI_FAILURE == dwavdapi_admin_delete(handle, login)) {
@@ -2890,7 +2890,7 @@ PHP_FUNCTION(dwavd_grp_init) {
     grp = dwavdapi_group_init();
     if (NULL == grp) {
         dwavdapi_strerror(&error, errno);
-        _dwavd_error(E_ERROR, "Cannot initialize resource: %s (%d)", error, errno);
+        php_error_docref(NULL TSRMLS_CC, E_ERROR, "Cannot initialize resource: %s (%d)", error, errno);
         if (error) {
             free(error);
             error = NULL;
@@ -2917,7 +2917,7 @@ PHP_FUNCTION(dwavd_grp_get_info) {
     }    
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)    
     if(0 == id_len) {
-        _dwavd_error(E_WARNING, "Group ID is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Group ID is not specified");
         RETURN_NULL();
     }            
     if (DWAVDAPI_FAILURE == dwavdapi_group_get_info(handle, &grp, id)) {
@@ -3090,12 +3090,12 @@ static int _dwavd_grp_set(dwavdapi_group *grp, int flag TSRMLS_DC, zval *val) {
                SUCCESS == zend_hash_has_more_elements_ex(Z_ARRVAL_P(val), &pos); zend_hash_move_forward_ex(Z_ARRVAL_P(val), &pos)) {
                 array_key_type = zend_hash_get_current_key_ex(Z_ARRVAL_P(val), &array_strkey, &array_strkey_len, &array_numkey, 0, &pos);
                 if(HASH_KEY_IS_LONG != array_key_type) {
-                    _dwavd_error(E_WARNING, "Key of array must be integer, got `%s'", _dwavd_var_type(*array_item));
+                    php_error_docref(NULL TSRMLS_CC, E_WARNING, "Key of array must be integer, got `%s'", _dwavd_var_type(*array_item));
                     return 1;
                 }
                 if(SUCCESS == zend_hash_get_current_data_ex(Z_ARRVAL_P(val), (void**)&array_item, &pos)){
                     if(Z_TYPE_PP(array_item) != IS_STRING) {
-                        _dwavd_error(E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
+                        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
                         return 1;
                     }                     
                     if(DWAVDAPI_FAILURE == dwavdapi_group_add_email(grp, Z_STRVAL_PP(array_item))) {
@@ -3110,12 +3110,12 @@ static int _dwavd_grp_set(dwavdapi_group *grp, int flag TSRMLS_DC, zval *val) {
                SUCCESS == zend_hash_has_more_elements_ex(Z_ARRVAL_P(val), &pos); zend_hash_move_forward_ex(Z_ARRVAL_P(val), &pos)) {
                 array_key_type = zend_hash_get_current_key_ex(Z_ARRVAL_P(val), &array_strkey, &array_strkey_len, &array_numkey, 0, &pos);
                 if(HASH_KEY_IS_LONG != array_key_type) {
-                    _dwavd_error(E_WARNING, "Key of array must be integer, got `%s'", _dwavd_var_type(*array_item));
+                    php_error_docref(NULL TSRMLS_CC, E_WARNING, "Key of array must be integer, got `%s'", _dwavd_var_type(*array_item));
                     return 1;
                 }
                 if(SUCCESS == zend_hash_get_current_data_ex(Z_ARRVAL_P(val), (void**)&array_item, &pos)){
                     if(Z_TYPE_PP(array_item) != IS_STRING) {
-                        _dwavd_error(E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
+                        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
                         return 1;
                     }                    
                     if(DWAVDAPI_FAILURE == dwavdapi_group_delete_email(grp, Z_STRVAL_PP(array_item))) {
@@ -3186,7 +3186,7 @@ PHP_FUNCTION(dwavd_grp_set_array) {
             if(array_key_type == HASH_KEY_IS_STRING) {
                 flag = _dwavd_opt_to_flag(array_strkey, _dwavd_grpopt_array, sizeof(_dwavd_grpopt_array)/sizeof(_dwavd_grpopt_array[0]));
                 if(-1 == flag) {
-                    _dwavd_error(E_WARNING, "Unknown option: `%s'", array_strkey);
+                    php_error_docref(NULL TSRMLS_CC, E_WARNING, "Unknown option: `%s'", array_strkey);
                     RETURN_FALSE
                 }
             } else {
@@ -3275,7 +3275,7 @@ PHP_FUNCTION(dwavd_grp_delete) {
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)    
     if(0 == id_len) {
-        _dwavd_error(E_WARNING, "Group ID is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Group ID is not specified");
         RETURN_FALSE
     }            
     if (DWAVDAPI_FAILURE == dwavdapi_group_delete(handle, id)) {
@@ -3323,12 +3323,12 @@ PHP_FUNCTION(dwavd_grp_send_message) {
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
             
     if (0 == id_len) {
-        _dwavd_error(E_WARNING, "Group ID is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Group ID is not specified");
         RETURN_FALSE
     }
 
     if (0 == message_len) {
-        _dwavd_error(E_WARNING, "Message is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Message is not specified");
         RETURN_FALSE
     }
 
@@ -3432,7 +3432,7 @@ PHP_FUNCTION(dwavd_grp_get_stats) {
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
             
     if(0 == id_len) {
-        _dwavd_error(E_WARNING, "Group ID is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Group ID is not specified");
         RETURN_NULL();
     }  
 
@@ -3440,7 +3440,7 @@ PHP_FUNCTION(dwavd_grp_get_stats) {
     DWAVD_CHECK_TIME(till, till)
             
     if(0 > top_viruses) {
-        _dwavd_error(E_WARNING, "Incorrect value of `top_viruses'. Expected positive number, got negative");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Incorrect value of `top_viruses'. Expected positive number, got negative");
         RETURN_NULL();
     }
             
@@ -3576,7 +3576,7 @@ PHP_FUNCTION(dwavd_trf_init) {
     grp = dwavdapi_group_init();
     if (NULL == grp) {
         dwavdapi_strerror(&error, errno);
-        _dwavd_error(E_ERROR, "Cannot initialize resource: %s (%d)", error, errno);
+        php_error_docref(NULL TSRMLS_CC, E_ERROR, "Cannot initialize resource: %s (%d)", error, errno);
         if (error) {
             free(error);
             error = NULL;
@@ -3604,7 +3604,7 @@ PHP_FUNCTION(dwavd_trf_get_info) {
     }    
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)    
     if(0 == id_len) {
-        _dwavd_error(E_WARNING, "Tariff ID is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Tariff ID is not specified");
         RETURN_NULL();
     }            
     if (DWAVDAPI_FAILURE == dwavdapi_tariff_get_info(handle, &grp, id)) {
@@ -3821,7 +3821,7 @@ PHP_FUNCTION(dwavd_trf_set_array) {
             if(array_key_type == HASH_KEY_IS_STRING) {
                 flag = _dwavd_opt_to_flag(array_strkey, _dwavd_trfopt_array, sizeof(_dwavd_trfopt_array)/sizeof(_dwavd_trfopt_array[0]));
                 if(-1 == flag) {
-                    _dwavd_error(E_WARNING, "Unknown option: `%s'", array_strkey);
+                    php_error_docref(NULL TSRMLS_CC, E_WARNING, "Unknown option: `%s'", array_strkey);
                     RETURN_FALSE
                 }
             } else {
@@ -3911,7 +3911,7 @@ PHP_FUNCTION(dwavd_trf_delete) {
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)    
     if(0 == id_len) {
-        _dwavd_error(E_WARNING, "Tariff ID is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Tariff ID is not specified");
         RETURN_NULL();
     }            
     if (DWAVDAPI_FAILURE == dwavdapi_tariff_delete(handle, id, tid)) {
@@ -4691,7 +4691,7 @@ PHP_FUNCTION(dwavd_st_init) {
     st = dwavdapi_station_init();
     if (NULL == st) {
         dwavdapi_strerror(&error, errno);
-        _dwavd_error(E_ERROR, "Cannot initialize resource: %s (%d)", error, errno);
+        php_error_docref(NULL TSRMLS_CC, E_ERROR, "Cannot initialize resource: %s (%d)", error, errno);
         if (error) {
             free(error);
             error = NULL;
@@ -4718,7 +4718,7 @@ PHP_FUNCTION(dwavd_st_get_info) {
     }    
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)    
     if(0 == id_len) {
-        _dwavd_error(E_WARNING, "Station ID is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Station ID is not specified");
         RETURN_NULL();
     }            
     if (DWAVDAPI_FAILURE == dwavdapi_station_get_info(handle, &st, id)) {
@@ -5015,7 +5015,7 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
                    return 1;
                 }
             } else {
-                _dwavd_error(E_WARNING, "Incorrect country code");
+                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Incorrect country code");
                 return 1;
             }
             return 0;
@@ -5034,7 +5034,7 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
                     return 0; 
                 } 
              } else {
-                _dwavd_error(E_WARNING, "Expected integer, got %s", _dwavd_var_type(val)); 
+                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected integer, got %s", _dwavd_var_type(val)); 
                 return 1; 
             }
 
@@ -5071,12 +5071,12 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
                SUCCESS == zend_hash_has_more_elements_ex(Z_ARRVAL_P(val), &pos); zend_hash_move_forward_ex(Z_ARRVAL_P(val), &pos)) {
                 array_key_type = zend_hash_get_current_key_ex(Z_ARRVAL_P(val), &array_strkey, &array_strkey_len, &array_numkey, 0, &pos);
                 if(HASH_KEY_IS_LONG != array_key_type) {
-                    _dwavd_error(E_WARNING, "Key of array must be integer, got `%s'", _dwavd_var_type(*array_item));
+                    php_error_docref(NULL TSRMLS_CC, E_WARNING, "Key of array must be integer, got `%s'", _dwavd_var_type(*array_item));
                     return 1;
                 }
                 if(SUCCESS == zend_hash_get_current_data_ex(Z_ARRVAL_P(val), (void**)&array_item, &pos)){
                     if(Z_TYPE_PP(array_item) != IS_STRING) {
-                        _dwavd_error(E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
+                        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
                         return 1;
                     }                    
                     if(DWAVDAPI_FAILURE == dwavdapi_station_add_email(st, Z_STRVAL_PP(array_item))) {
@@ -5091,12 +5091,12 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
                SUCCESS == zend_hash_has_more_elements_ex(Z_ARRVAL_P(val), &pos); zend_hash_move_forward_ex(Z_ARRVAL_P(val), &pos)) {
                 array_key_type = zend_hash_get_current_key_ex(Z_ARRVAL_P(val), &array_strkey, &array_strkey_len, &array_numkey, 0, &pos);
                 if(HASH_KEY_IS_LONG != array_key_type) {
-                    _dwavd_error(E_WARNING, "Key of array must be integer, got `%s'", _dwavd_var_type(*array_item));
+                    php_error_docref(NULL TSRMLS_CC, E_WARNING, "Key of array must be integer, got `%s'", _dwavd_var_type(*array_item));
                     return 1;
                 }
                 if(SUCCESS == zend_hash_get_current_data_ex(Z_ARRVAL_P(val), (void**)&array_item, &pos)){
                     if(Z_TYPE_PP(array_item) != IS_STRING) {
-                        _dwavd_error(E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
+                        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
                         return 1;
                     }                    
                     if(DWAVDAPI_FAILURE == dwavdapi_station_delete_email(st, Z_STRVAL_PP(array_item))) {
@@ -5111,12 +5111,12 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
                SUCCESS == zend_hash_has_more_elements_ex(Z_ARRVAL_P(val), &pos); zend_hash_move_forward_ex(Z_ARRVAL_P(val), &pos)) {
                 array_key_type = zend_hash_get_current_key_ex(Z_ARRVAL_P(val), &array_strkey, &array_strkey_len, &array_numkey, 0, &pos);
                 if(HASH_KEY_IS_LONG != array_key_type) {
-                    _dwavd_error(E_WARNING, "Key of array must be integer, got `%s'", _dwavd_var_type(*array_item));
+                    php_error_docref(NULL TSRMLS_CC, E_WARNING, "Key of array must be integer, got `%s'", _dwavd_var_type(*array_item));
                     return 1;
                 }
                 if(SUCCESS == zend_hash_get_current_data_ex(Z_ARRVAL_P(val), (void**)&array_item, &pos)){
                     if(Z_TYPE_PP(array_item) != IS_STRING) {
-                        _dwavd_error(E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
+                        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Value of array must be string, got `%s'", _dwavd_var_type(*array_item));
                         return 1;
                     }
                     if(DWAVDAPI_FAILURE == dwavdapi_station_add_to_group(st, Z_STRVAL_PP(array_item))) {
@@ -5135,7 +5135,7 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
                     return 0; 
                 } 
              } else {
-                _dwavd_error(E_WARNING, "Expected integer, got %s", _dwavd_var_type(val)); 
+                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected integer, got %s", _dwavd_var_type(val)); 
                 return 1; 
             }
         case DWAVD_ST_BLOCK_ENDS:
@@ -5148,7 +5148,7 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
                     return 0; 
                 } 
              } else {
-                _dwavd_error(E_WARNING, "Expected integer, got %s", _dwavd_var_type(val)); 
+                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected integer, got %s", _dwavd_var_type(val)); 
                 return 1; 
             }
     }    
@@ -5214,7 +5214,7 @@ PHP_FUNCTION(dwavd_st_set_array) {
             if(array_key_type == HASH_KEY_IS_STRING) {
                 flag = _dwavd_opt_to_flag(array_strkey, _dwavd_stopt_array, sizeof(_dwavd_stopt_array)/sizeof(_dwavd_stopt_array[0]));
                 if(-1 == flag) {
-                    _dwavd_error(E_WARNING, "Unknown option: `%s'", array_strkey);
+                    php_error_docref(NULL TSRMLS_CC, E_WARNING, "Unknown option: `%s'", array_strkey);
                     RETURN_FALSE
                 }
             } else {
@@ -5303,7 +5303,7 @@ PHP_FUNCTION(dwavd_st_delete) {
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)    
     if(0 == id_len) {
-        _dwavd_error(E_WARNING, "Station ID is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Station ID is not specified");
         RETURN_FALSE
     }            
     if (DWAVDAPI_FAILURE == dwavdapi_station_delete(handle, id)) {
@@ -5351,12 +5351,12 @@ PHP_FUNCTION(dwavd_st_send_message) {
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
             
     if (0 == id_len) {
-        _dwavd_error(E_WARNING, "Station ID is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Station ID is not specified");
         RETURN_FALSE
     }
 
     if (0 == message_len) {
-        _dwavd_error(E_WARNING, "Message is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Message is not specified");
         RETURN_FALSE
     }
 
@@ -5416,7 +5416,7 @@ PHP_FUNCTION(dwavd_st_get_stats) {
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
             
     if(0 == id_len) {
-        _dwavd_error(E_WARNING, "Station ID is not specified");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Station ID is not specified");
         RETURN_NULL();
     }  
 
@@ -5424,7 +5424,7 @@ PHP_FUNCTION(dwavd_st_get_stats) {
     DWAVD_CHECK_TIME(till, till)
             
     if(0 > top_viruses) {
-        _dwavd_error(E_WARNING, "Incorrect value of `top_viruses'. Expected positive number, got negative");
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Incorrect value of `top_viruses'. Expected positive number, got negative");
         RETURN_NULL();
     }
             

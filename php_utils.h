@@ -16,7 +16,6 @@
 extern "C" {
 #endif
 
-void _dwavd_error(int type, const char *format, ...);
 const char *_dwavd_var_type(zval *var);
 void _dwavd_carray_to_phparray(zval **php_array, const char **carray, unsigned int carray_size);
 
