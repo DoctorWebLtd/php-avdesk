@@ -1683,7 +1683,7 @@ PHP_FUNCTION(dwavd_init) {
     dwavdapi_handle *handle = NULL;
 
     if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|slsss", &host, &host_len, &port, &login, &login_len, &pwd, &pwd_len, &crt, &crt_len)) {
-        RETURN_NULL();
+        return;
     }
         
     handle = dwavdapi_init();
@@ -1744,7 +1744,7 @@ PHP_FUNCTION(dwavd_free) {
     zval *res = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
     if(FAILURE == zend_list_delete(Z_RESVAL_P(res))) {
@@ -1809,7 +1809,7 @@ PHP_FUNCTION(dwavd_set_port) {
     zval *res = NULL;
 
     if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rl", &res, &port)) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
     if (port <= 0 || port > 65535) {
@@ -1835,7 +1835,7 @@ PHP_FUNCTION(dwavd_set_host) {
     zval *res = NULL;
 
     if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rs", &res, &value, &value_len)) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
     if (value_len == 0) {
@@ -1861,7 +1861,7 @@ PHP_FUNCTION(dwavd_set_login) {
     zval *res = NULL;
 
     if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rs", &res, &value, &value_len)) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
     if (value_len == 0) {
@@ -1887,7 +1887,7 @@ PHP_FUNCTION(dwavd_set_password) {
     zval *res = NULL;
 
     if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rs", &res, &value, &value_len)) {
-        RETURN_FALSE
+	return;
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
     if (value_len == 0) {
@@ -1912,7 +1912,7 @@ PHP_FUNCTION(dwavd_set_timeout) {
     zval *res = NULL;
 
     if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rl", &res, &timeout)) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
     if (timeout <= 1) {
@@ -1936,7 +1936,7 @@ PHP_FUNCTION(dwavd_set_ssl_crt) {
     zval *res = NULL;
 
     if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rs", &res, &value, &value_len)) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
 
@@ -1964,7 +1964,7 @@ PHP_FUNCTION(dwavd_set_user_agent) {
     zval *res = NULL;
 
     if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rs", &res, &value, &value_len)) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
 
@@ -1994,7 +1994,7 @@ PHP_FUNCTION(dwavd_srv_get_info) {
     dwavdapi_server *srv = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_NULL();
+        return;
     }
     
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
@@ -2015,7 +2015,7 @@ PHP_FUNCTION(dwavd_srv_free) {
     dwavdapi_server *srv = NULL;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_SRV_RES_WITH_RETURN_FALSE(srv, Z_RESVAL_P(res), le_dwavd_srv, rsrc_type)
     if (FAILURE == zend_list_delete(Z_RESVAL_P(res))) {
@@ -2037,7 +2037,7 @@ PHP_FUNCTION(dwavd_srv) {
     dwavdapi_server *srv = NULL;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_SRV_RES_WITH_RETURN_FALSE(srv, Z_RESVAL_P(res), le_dwavd_srv, rsrc_type)  
         
@@ -2097,7 +2097,7 @@ PHP_FUNCTION(dwavd_srv_array) {
     dwavdapi_server *srv = NULL;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_SRV_RES_WITH_RETURN_FALSE(srv, Z_RESVAL_P(res), le_dwavd_srv, rsrc_type)
     array_init(return_value);
@@ -2136,7 +2136,7 @@ PHP_FUNCTION(dwavd_srv_get_stats) {
     long top_viruses = 0;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rlll", &res, &from, &till, &top_viruses) == FAILURE) {
-        RETURN_NULL();
+        return;
     }
     
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
@@ -2166,7 +2166,7 @@ PHP_FUNCTION(dwavd_srv_stats_free) {
     dwavdapi_server_statistics *stats = NULL;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_SRV_STATS_RES_WITH_RETURN_FALSE(stats, Z_RESVAL_P(res), le_dwavd_srv_stats, rsrc_type)
     if (FAILURE == zend_list_delete(Z_RESVAL_P(res))) {
@@ -2195,7 +2195,7 @@ PHP_FUNCTION(dwavd_srv_stats) {
     int rsrc = -1;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_SRV_STATS_RES_WITH_RETURN_FALSE(stats, Z_RESVAL_P(res), le_dwavd_srv_stats, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_srv_stats_opt_array) 
@@ -2254,7 +2254,7 @@ PHP_FUNCTION(dwavd_srv_stats_array) {
     zval *list_array = NULL;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_SRV_STATS_RES_WITH_RETURN_FALSE(stats, Z_RESVAL_P(res), le_dwavd_srv_stats, rsrc_type)
     array_init(return_value);
@@ -2300,7 +2300,7 @@ PHP_FUNCTION(dwavd_srv_key_get_info) {
     dwavdapi_handle *handle = NULL;
     dwavdapi_server_key *key = NULL;
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_NULL();
+        return;
     }
     
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
@@ -2321,7 +2321,7 @@ PHP_FUNCTION(dwavd_srv_key_free) {
     dwavdapi_server_key *key = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_SRVKEY_RES_WITH_RETURN_FALSE(key, Z_RESVAL_P(res), le_dwavd_srv_key, rsrc_type)
     if (FAILURE == zend_list_delete(Z_RESVAL_P(res))) {
@@ -2343,7 +2343,7 @@ PHP_FUNCTION(dwavd_srv_key) {
     dwavdapi_server_key *key = NULL;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_SRVKEY_RES_WITH_RETURN_FALSE(key, Z_RESVAL_P(res), le_dwavd_srv_key, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_srvkeyopt_array) 
@@ -2395,7 +2395,7 @@ PHP_FUNCTION(dwavd_srv_run_task) {
     dwavdapi_handle *handle = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rs", &res, &id, &id_len) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
@@ -2420,7 +2420,7 @@ PHP_FUNCTION(dwavd_srv_key_array) {
     zval *res = NULL;
     dwavdapi_server_key *key = NULL;
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+	return;
     }
     DWAVD_FETCH_SRVKEY_RES_WITH_RETURN_FALSE(key, Z_RESVAL_P(res), le_dwavd_srv_key, rsrc_type)
     array_init(return_value);
@@ -2480,7 +2480,7 @@ PHP_FUNCTION(dwavd_adm_get_info) {
     dwavdapi_handle *handle = NULL;
     dwavdapi_admin *adm = NULL;
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rs", &res, &login, &login_len) == FAILURE) {
-        RETURN_NULL();
+        return;
     }    
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)    
     if(0 == login_len) {
@@ -2503,7 +2503,7 @@ PHP_FUNCTION(dwavd_adm_free) {
     zval *res = NULL;
     dwavdapi_admin *adm = NULL;
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     
     DWAVD_FETCH_ADM_RES_WITH_RETURN_FALSE(adm, Z_RESVAL_P(res), le_dwavd_adm, rsrc_type)
@@ -2527,7 +2527,7 @@ PHP_FUNCTION(dwavd_adm) {
     dwavdapi_admin *adm = NULL;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_ADM_RES_WITH_RETURN_FALSE(adm, Z_RESVAL_P(res), le_dwavd_adm, rsrc_type)
         
@@ -2578,7 +2578,7 @@ PHP_FUNCTION(dwavd_adm_array) {
     zval *groups = NULL;
     dwavdapi_admin *adm = NULL;
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_ADM_RES_WITH_RETURN_FALSE(adm, Z_RESVAL_P(res), le_dwavd_adm, rsrc_type)
     array_init(return_value);
@@ -2687,7 +2687,7 @@ PHP_FUNCTION(dwavd_adm_set) {
     zval *opt = NULL;
     zval *val = NULL;    
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rzz", &res, &opt, &val) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_ADM_RES_WITH_RETURN_FALSE(adm, Z_RESVAL_P(res), le_dwavd_adm, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_admopt_array)
@@ -2717,7 +2717,7 @@ PHP_FUNCTION(dwavd_adm_set_array) {
     int flag = -1;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &array) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
 
     DWAVD_FETCH_ADM_RES_WITH_RETURN_FALSE(adm, Z_RESVAL_P(res), le_dwavd_adm, rsrc_type)
@@ -2761,7 +2761,7 @@ PHP_FUNCTION(dwavd_adm_add) {
     dwavdapi_admin *adm = NULL;
    
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rr", &res, &res_adm) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
@@ -2790,7 +2790,7 @@ PHP_FUNCTION(dwavd_adm_change) {
     dwavdapi_admin *adm = NULL;
    
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rr", &res, &res_adm) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
@@ -2816,7 +2816,7 @@ PHP_FUNCTION(dwavd_adm_delete) {
     dwavdapi_handle *handle = NULL;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rs", &res, &login, &login_len) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)    
     if(0 == login_len) {
@@ -2844,7 +2844,7 @@ PHP_FUNCTION(dwavd_adm_get_list) {
     dwavdapi_handle *handle = NULL;
     dwavdapi_list *list = NULL;
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_NULL();
+        return;
     }    
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)            
     if (DWAVDAPI_FAILURE == dwavdapi_admin_get_list(handle, &list)) {
@@ -2863,7 +2863,7 @@ PHP_FUNCTION(dwavd_adm_list_free) {
     zval *res = NULL;
     dwavdapi_list *list = NULL;
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     
     DWAVD_FETCH_ADM_LST_RES_WITH_RETURN_FALSE(list, Z_RESVAL_P(res), le_dwavd_adm_list, rsrc_type)
@@ -2913,7 +2913,7 @@ PHP_FUNCTION(dwavd_grp_get_info) {
     dwavdapi_handle *handle = NULL;
     dwavdapi_group *grp = NULL;
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rs", &res, &id, &id_len) == FAILURE) {
-        RETURN_NULL();
+        return;
     }    
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)    
     if(0 == id_len) {
@@ -2936,7 +2936,7 @@ PHP_FUNCTION(dwavd_grp_free) {
     zval *res = NULL;
     dwavdapi_group *grp = NULL;
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     
     DWAVD_FETCH_GRP_RES_WITH_RETURN_FALSE(grp, Z_RESVAL_P(res), le_dwavd_grp, rsrc_type)
@@ -2965,7 +2965,7 @@ PHP_FUNCTION(dwavd_grp) {
     int rsrc_rights = -1;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_GRP_RES_WITH_RETURN_FALSE(grp, Z_RESVAL_P(res), le_dwavd_grp, rsrc_type)        
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_grpopt_array)
@@ -3034,7 +3034,7 @@ PHP_FUNCTION(dwavd_grp_array) {
     dwavdapi_list *list = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_GRP_RES_WITH_RETURN_FALSE(grp, Z_RESVAL_P(res), le_dwavd_grp, rsrc_type)
     array_init(return_value);
@@ -3142,7 +3142,7 @@ PHP_FUNCTION(dwavd_grp_set) {
     dwavdapi_group *grp = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rzz", &res, &opt, &val) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_GRP_RES_WITH_RETURN_FALSE(grp, Z_RESVAL_P(res), le_dwavd_grp, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_grpopt_array)
@@ -3172,7 +3172,7 @@ PHP_FUNCTION(dwavd_grp_set_array) {
     int flag = -1;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &array) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
 
     DWAVD_FETCH_GRP_RES_WITH_RETURN_FALSE(grp, Z_RESVAL_P(res), le_dwavd_grp, rsrc_type)
@@ -3216,7 +3216,7 @@ PHP_FUNCTION(dwavd_grp_add) {
     dwavdapi_group *grp = NULL;
    
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rr", &res, &res_grp) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
@@ -3245,7 +3245,7 @@ PHP_FUNCTION(dwavd_grp_change) {
     dwavdapi_group *grp = NULL;
    
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rr", &res, &res_grp) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
         
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
@@ -3271,7 +3271,7 @@ PHP_FUNCTION(dwavd_grp_delete) {
     dwavdapi_handle *handle = NULL;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rs", &res, &id, &id_len) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)    
     if(0 == id_len) {
@@ -3317,7 +3317,7 @@ PHP_FUNCTION(dwavd_grp_send_message) {
     dwavdapi_handle *handle = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rss|sssss", &res, &id, &id_len, &message, &message_len, &link_text, &link_text_len, &link_url, &link_url_len, &logo_file, &logo_file_len, &logo_link, &logo_link_len, &logo_text, &logo_text_len) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
@@ -3376,7 +3376,7 @@ PHP_FUNCTION(dwavd_grp_get_list) {
     dwavdapi_handle *handle = NULL;
     dwavdapi_list *list = NULL;
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_NULL();
+        return;
     }    
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
     
@@ -3396,7 +3396,7 @@ PHP_FUNCTION(dwavd_grp_list_free) {
     zval *res = NULL;
     dwavdapi_list *list = NULL;
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     
     DWAVD_FETCH_GRP_LST_RES_WITH_RETURN_FALSE(list, Z_RESVAL_P(res), le_dwavd_grp_list, rsrc_type)
@@ -3426,7 +3426,7 @@ PHP_FUNCTION(dwavd_grp_get_stats) {
     int id_len = 0;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rslll", &res, &id, &id_len, &from, &till, &top_viruses) == FAILURE) {
-        RETURN_NULL();
+        return;
     }
     
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
@@ -3461,7 +3461,7 @@ PHP_FUNCTION(dwavd_grp_stats_free) {
     dwavdapi_group_statistics *stats = NULL;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_GRP_STATS_RES_WITH_RETURN_FALSE(stats, Z_RESVAL_P(res), le_dwavd_grp_stats, rsrc_type)
     if (FAILURE == zend_list_delete(Z_RESVAL_P(res))) {
@@ -3489,7 +3489,7 @@ PHP_FUNCTION(dwavd_grp_stats) {
     int rsrc = -1;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_GRP_STATS_RES_WITH_RETURN_FALSE(stats, Z_RESVAL_P(res), le_dwavd_grp_stats, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_grp_stats_opt_array) 
@@ -3535,7 +3535,7 @@ PHP_FUNCTION(dwavd_grp_stats_array) {
     zval *list_array = NULL;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_GRP_STATS_RES_WITH_RETURN_FALSE(stats, Z_RESVAL_P(res), le_dwavd_grp_stats, rsrc_type)
     array_init(return_value);
@@ -3600,7 +3600,7 @@ PHP_FUNCTION(dwavd_trf_get_info) {
     dwavdapi_group *grp = NULL;
      
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rs", &res, &id, &id_len) == FAILURE) {
-        RETURN_NULL();
+        return;
     }    
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)    
     if(0 == id_len) {
@@ -3623,7 +3623,7 @@ PHP_FUNCTION(dwavd_trf_free) {
     zval *res = NULL;
     dwavdapi_group *grp = NULL;
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     
     DWAVD_FETCH_GRP_RES_WITH_RETURN_FALSE(grp, Z_RESVAL_P(res), le_dwavd_trf, rsrc_type)
@@ -3650,7 +3650,7 @@ PHP_FUNCTION(dwavd_trf) {
     int rsrc_id = -1;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_GRP_RES_WITH_RETURN_FALSE(grp, Z_RESVAL_P(res), le_dwavd_trf, rsrc_type)        
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_trfopt_array)
@@ -3709,7 +3709,7 @@ PHP_FUNCTION(dwavd_trf_array) {
     dwavdapi_group *grp = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_GRP_RES_WITH_RETURN_FALSE(grp, Z_RESVAL_P(res), le_dwavd_trf, rsrc_type)
     array_init(return_value);
@@ -3776,7 +3776,7 @@ PHP_FUNCTION(dwavd_trf_set) {
     dwavdapi_group *grp = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rzz", &res, &opt, &val) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
 
     DWAVD_FETCH_GRP_RES_WITH_RETURN_FALSE(grp, Z_RESVAL_P(res), le_dwavd_trf, rsrc_type)
@@ -3807,7 +3807,7 @@ PHP_FUNCTION(dwavd_trf_set_array) {
     int flag = -1;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &array) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
 
     DWAVD_FETCH_GRP_RES_WITH_RETURN_FALSE(grp, Z_RESVAL_P(res), le_dwavd_trf, rsrc_type)
@@ -3851,7 +3851,7 @@ PHP_FUNCTION(dwavd_trf_add) {
     dwavdapi_group *grp = NULL;
    
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rr", &res, &res_grp) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
@@ -3880,7 +3880,7 @@ PHP_FUNCTION(dwavd_trf_change) {
     dwavdapi_group *grp = NULL;
    
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rr", &res, &res_grp) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
@@ -3907,7 +3907,7 @@ PHP_FUNCTION(dwavd_trf_delete) {
     dwavdapi_handle *handle = NULL;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rss", &res, &id, &id_len, &tid, &tid_len) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)    
     if(0 == id_len) {
@@ -3934,7 +3934,7 @@ PHP_FUNCTION(dwavd_trf_set_component) {
     long val = 0;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rll", &res, &comp, &val) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_GRP_RES_WITH_RETURN_FALSE(grp, Z_RESVAL_P(res), le_dwavd_trf, rsrc_type)
     
@@ -3959,7 +3959,7 @@ PHP_FUNCTION(dwavd_trf_get_list) {
     dwavdapi_handle *handle = NULL;
     dwavdapi_list *list = NULL;
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_NULL();
+        return;
     }    
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
     
@@ -3979,7 +3979,7 @@ PHP_FUNCTION(dwavd_trf_list_free) {
     zval *res = NULL;
     dwavdapi_list *list = NULL;
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     
     DWAVD_FETCH_GRP_LST_RES_WITH_RETURN_FALSE(list, Z_RESVAL_P(res), le_dwavd_trf_list, rsrc_type)
@@ -4005,7 +4005,7 @@ PHP_FUNCTION(dwavd_list_next) {
     unsigned int i = 0;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_LST_RES_WITH_RETURN_FALSE(lst, Z_RESVAL_P(res), res_found_type)
     
@@ -4034,7 +4034,7 @@ PHP_FUNCTION(dwavd_list_prev) {
     unsigned int i = 0;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_LST_RES_WITH_RETURN_FALSE(lst, Z_RESVAL_P(res), res_found_type)
     
@@ -4062,7 +4062,7 @@ PHP_FUNCTION(dwavd_list_rewind) {
     unsigned int i = 0;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_LST_RES_WITH_RETURN_FALSE(lst, Z_RESVAL_P(res), res_found_type)
     
@@ -4088,7 +4088,7 @@ PHP_FUNCTION(dwavd_list_current) {
     char *id = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_NULL();
+        return;
     }
     
     DWAVD_FETCH_LST_RES_WITH_RETURN_NULL(lst, Z_RESVAL_P(res), res_found_type)
@@ -4265,7 +4265,7 @@ PHP_FUNCTION(dwavd_list_array) {
     int res_found_type = -1;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE;
+        return;
     }
     DWAVD_FETCH_LST_RES_WITH_RETURN_FALSE(lst, Z_RESVAL_P(res), res_found_type)
             
@@ -4291,7 +4291,7 @@ PHP_FUNCTION(dwavd_component) {
     int flag = -1;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_CMPS_RES_WITH_RETURN_FALSE(cmp, Z_RESVAL_P(res), le_dwavd_component, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_cmpopt_array)
@@ -4321,7 +4321,7 @@ PHP_FUNCTION(dwavd_component_installed) {
     int flag = -1;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_CMP_INSTD_RES_WITH_RETURN_FALSE(cmp, Z_RESVAL_P(res), le_dwavd_component_installed, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_cmp_instd_opt_array)
@@ -4351,7 +4351,7 @@ PHP_FUNCTION(dwavd_component_running) {
     int flag = -1;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_CMP_RUN_RES_WITH_RETURN_FALSE(cmp, Z_RESVAL_P(res), le_dwavd_component_running, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_cmp_run_opt_array)
@@ -4382,7 +4382,7 @@ PHP_FUNCTION(dwavd_component_array) {
     dwavdapi_component *cmp = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_CMPS_RES_WITH_RETURN_FALSE(cmp, Z_RESVAL_P(res), le_dwavd_component, rsrc_type)
     _dwavd_component_array(&array, cmp);
@@ -4403,7 +4403,7 @@ PHP_FUNCTION(dwavd_component_installed_array) {
     dwavdapi_installed_component *cmp = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_CMP_INSTD_RES_WITH_RETURN_FALSE(cmp, Z_RESVAL_P(res), le_dwavd_component_installed, rsrc_type)
     _dwavd_component_installed_array(&array, cmp);
@@ -4424,7 +4424,7 @@ PHP_FUNCTION(dwavd_component_running_array) {
     dwavdapi_running_component *cmp = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_CMP_RUN_RES_WITH_RETURN_FALSE(cmp, Z_RESVAL_P(res), le_dwavd_component_running, rsrc_type)
     _dwavd_component_running_array(&array, cmp);
@@ -4449,7 +4449,7 @@ PHP_FUNCTION(dwavd_right) {
     int flag = -1;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_RHT_RES_WITH_RETURN_FALSE(rht, Z_RESVAL_P(res), le_dwavd_right, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_rhtopt_array)
@@ -4478,7 +4478,7 @@ PHP_FUNCTION(dwavd_right_array) {
     dwavdapi_right *rht = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_RHT_RES_WITH_RETURN_FALSE(rht, Z_RESVAL_P(res), le_dwavd_right, rsrc_type)
     array_init(return_value);
@@ -4504,7 +4504,7 @@ PHP_FUNCTION(dwavd_base) {
     int flag = -1;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_BASE_RES_WITH_RETURN_FALSE(base, Z_RESVAL_P(res), le_dwavd_base, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_baseopt_array)
@@ -4534,7 +4534,7 @@ PHP_FUNCTION(dwavd_base_array) {
     dwavdapi_base *base = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_BASE_RES_WITH_RETURN_FALSE(base, Z_RESVAL_P(res), le_dwavd_base, rsrc_type)
     array_init(return_value);
@@ -4560,7 +4560,7 @@ PHP_FUNCTION(dwavd_package) {
     dwavdapi_package *package = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt)==FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_PACKAGE_RES_WITH_RETURN_FALSE(package, Z_RESVAL_P(res), le_dwavd_package, res_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_packopt_array)
@@ -4585,7 +4585,7 @@ PHP_FUNCTION(dwavd_package_array) {
     dwavdapi_package *package = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res)==FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_PACKAGE_RES_WITH_RETURN_FALSE(package, Z_RESVAL_P(res), le_dwavd_package, res_type)
     array_init(return_value);
@@ -4629,7 +4629,7 @@ PHP_FUNCTION(dwavd_module) {
     int flag = -1;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_MOD_RES_WITH_RETURN_FALSE(module, Z_RESVAL_P(res), le_dwavd_module, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_moduleopt_array)
@@ -4664,7 +4664,7 @@ PHP_FUNCTION(dwavd_module_array) {
     dwavdapi_module *module = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_MOD_RES_WITH_RETURN_FALSE(module, Z_RESVAL_P(res), le_dwavd_module, rsrc_type)
     array_init(return_value);
@@ -4714,7 +4714,7 @@ PHP_FUNCTION(dwavd_st_get_info) {
     dwavdapi_handle *handle = NULL;
     dwavdapi_station *st = NULL;
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rs", &res, &id, &id_len) == FAILURE) {
-        RETURN_NULL();
+        return;
     }    
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)    
     if(0 == id_len) {
@@ -4738,7 +4738,7 @@ PHP_FUNCTION(dwavd_st_free) {
     dwavdapi_station *st = NULL;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_ST_RES_WITH_RETURN_FALSE(st, Z_RESVAL_P(res), le_dwavd_st, rsrc_type)
     if (FAILURE == zend_list_delete(Z_RESVAL_P(res))) {
@@ -4766,7 +4766,7 @@ PHP_FUNCTION(dwavd_st) {
     int rsrc_id = -1;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_ST_RES_WITH_RETURN_FALSE(st, Z_RESVAL_P(res), le_dwavd_st, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_stopt_array)
@@ -4905,7 +4905,7 @@ PHP_FUNCTION(dwavd_st_array) {
     dwavdapi_list *list = NULL;
         
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_ST_RES_WITH_RETURN_FALSE(st, Z_RESVAL_P(res), le_dwavd_st, rsrc_type)
     array_init(return_value);
@@ -5169,7 +5169,7 @@ PHP_FUNCTION(dwavd_st_set) {
     zval *val = NULL;    
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rzz", &res, &opt, &val) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_ST_RES_WITH_RETURN_FALSE(st, Z_RESVAL_P(res), le_dwavd_st, rsrc_type)        
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_stopt_array)
@@ -5200,7 +5200,7 @@ PHP_FUNCTION(dwavd_st_set_array) {
     int flag = -1;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &array) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
 
     DWAVD_FETCH_ST_RES_WITH_RETURN_FALSE(st, Z_RESVAL_P(res), le_dwavd_st, rsrc_type)
@@ -5244,7 +5244,7 @@ PHP_FUNCTION(dwavd_st_add) {
     dwavdapi_station *st = NULL;
    
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rr", &res, &res_st) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
@@ -5273,7 +5273,7 @@ PHP_FUNCTION(dwavd_st_change) {
     dwavdapi_station *st = NULL;
    
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rr", &res, &res_st) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
@@ -5299,7 +5299,7 @@ PHP_FUNCTION(dwavd_st_delete) {
     dwavdapi_handle *handle = NULL;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rs", &res, &id, &id_len) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)    
     if(0 == id_len) {
@@ -5345,7 +5345,7 @@ PHP_FUNCTION(dwavd_st_send_message) {
     dwavdapi_handle *handle = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rss|sssss", &res, &id, &id_len, &message, &message_len, &link_text, &link_text_len, &link_url, &link_url_len, &logo_file, &logo_file_len, &logo_link, &logo_link_len, &logo_text, &logo_text_len) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
@@ -5410,7 +5410,7 @@ PHP_FUNCTION(dwavd_st_get_stats) {
     int id_len = 0;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rslll", &res, &id, &id_len, &from, &till, &top_viruses) == FAILURE) {
-        RETURN_NULL();
+        return;
     }
     
     DWAVD_FETCH_HANDLE_WITH_RETURN_NULL(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
@@ -5445,7 +5445,7 @@ PHP_FUNCTION(dwavd_st_stats_free) {
     dwavdapi_station_statistics *stats = NULL;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_ST_STATS_RES_WITH_RETURN_FALSE(stats, Z_RESVAL_P(res), le_dwavd_st_stats, rsrc_type)
     if (FAILURE == zend_list_delete(Z_RESVAL_P(res))) {
@@ -5472,7 +5472,7 @@ PHP_FUNCTION(dwavd_st_stats) {
     int rsrc = -1;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_ST_STATS_RES_WITH_RETURN_FALSE(stats, Z_RESVAL_P(res), le_dwavd_st_stats, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_grp_stats_opt_array) 
@@ -5511,7 +5511,7 @@ PHP_FUNCTION(dwavd_st_stats_array) {
     zval *list_array = NULL;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_ST_STATS_RES_WITH_RETURN_FALSE(stats, Z_RESVAL_P(res), le_dwavd_st_stats, rsrc_type)
     array_init(return_value);
@@ -5544,7 +5544,7 @@ PHP_FUNCTION(dwavd_stats_sts_state) {
     int flag = -1;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_STATES_RES_WITH_RETURN_FALSE(state, Z_RESVAL_P(res), le_dwavd_stations_state, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_st_state_opt_array)
@@ -5579,7 +5579,7 @@ PHP_FUNCTION(dwavd_stats_sts_state_array) {
     dwavdapi_statistics_stations_state *state = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_STATES_RES_WITH_RETURN_FALSE(state, Z_RESVAL_P(res), le_dwavd_stations_state, rsrc_type)
     array_init(return_value);
@@ -5604,7 +5604,7 @@ PHP_FUNCTION(dwavd_stats_scans) {
     int flag = -1;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_SCANS_RES_WITH_RETURN_FALSE(scans, Z_RESVAL_P(res), le_dwavd_stats_scans, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_scans_opt_array)
@@ -5643,7 +5643,7 @@ PHP_FUNCTION(dwavd_stats_scans_array) {
     dwavdapi_statistics_scans *scans = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_SCANS_RES_WITH_RETURN_FALSE(scans, Z_RESVAL_P(res), le_dwavd_stats_scans, rsrc_type)
     array_init(return_value);
@@ -5669,7 +5669,7 @@ PHP_FUNCTION(dwavd_stats_infcd) {
     int flag = -1;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_INFCD_RES_WITH_RETURN_FALSE(infcd, Z_RESVAL_P(res), le_dwavd_stats_infections, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_infcd_opt_array)
@@ -5708,7 +5708,7 @@ PHP_FUNCTION(dwavd_stats_infcd_array) {
     dwavdapi_statistics_infections *infcd = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_INFCD_RES_WITH_RETURN_FALSE(infcd, Z_RESVAL_P(res), le_dwavd_stats_infections, rsrc_type)
     array_init(return_value);
@@ -5734,7 +5734,7 @@ PHP_FUNCTION(dwavd_stats_traffic) {
     dwavdapi_statistics_traffic *traffic = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_TRAFFIC_RES_WITH_RETURN_FALSE(traffic, Z_RESVAL_P(res), le_dwavd_stats_traffic, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_traffic_opt_array)
@@ -5761,7 +5761,7 @@ PHP_FUNCTION(dwavd_stats_traffic_array) {
     dwavdapi_statistics_traffic *traffic = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_TRAFFIC_RES_WITH_RETURN_FALSE(traffic, Z_RESVAL_P(res), le_dwavd_stats_traffic, rsrc_type)
     array_init(return_value);
@@ -5790,7 +5790,7 @@ PHP_FUNCTION(dwavd_virus) {
     int rsrc = -1;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_VIRUS_RES_WITH_RETURN_FALSE(virus, Z_RESVAL_P(res), le_dwavd_virus, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_virus_opt_array)
@@ -5822,7 +5822,7 @@ PHP_FUNCTION(dwavd_virus_array) {
     dwavdapi_virus *virus = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_VIRUS_RES_WITH_RETURN_FALSE(virus, Z_RESVAL_P(res), le_dwavd_virus, rsrc_type)
     array_init(return_value);
@@ -5848,7 +5848,7 @@ PHP_FUNCTION(dwavd_infcd_obj) {
     dwavdapi_infected_object *obj = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &res, &opt) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_INFCD_OBJ_RES_WITH_RETURN_FALSE(obj, Z_RESVAL_P(res), le_dwavd_infcd_obj, rsrc_type)
     DWAVD_OPT_TO_FLAG(flag, opt, _dwavd_infcd_objs_opt_array)
@@ -5894,7 +5894,7 @@ PHP_FUNCTION(dwavd_infcd_obj_array) {
     dwavdapi_infected_object *obj = NULL;
     
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &res) == FAILURE) {
-        RETURN_FALSE
+        return;
     }
     DWAVD_FETCH_INFCD_OBJ_RES_WITH_RETURN_FALSE(obj, Z_RESVAL_P(res), le_dwavd_infcd_obj, rsrc_type)
     array_init(return_value);
