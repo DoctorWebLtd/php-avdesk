@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+    <name>avdesk</name>
+    <channel>pecl.php.net</channel>
+        <summary>Dr.Web php-avdesk is a PHP module to manipulatate Dr.Web AV-Desk server resources</summary>
+        <description>
+	       Dr.Web php-avdesk is a PHP module, wrapping Dr.Web dwavdapi C library to introduce simple yet powerful interface to manipulatate Dr.Web AV-Desk server resources from within your PHP code, making integration of thirdparty applications with AV-Desk as easy as possible.
+        </description>
+        <lead>
+    	    <name>Anton Dobkin</name>
+    	    <user>adobkin</user>
+    	    <email>adobkin@php.net</email>
+    	    <active>yes</active>
+        </lead>
+        <date>2013-06-03</date>
+        <version>
+    	   <release>1.1.0</release>
+    	   <api>1.1.0</api>
+        </version>
+        <stability>
+    	   <release>stable</release>
+    	   <api>stable</api>
+        </stability>
+        <license uri="https://github.com/DoctorWebLtd/php-avdesk/blob/master/LICENSE">Proprietary</license>
+        <notes>
+    	    - Added support Dr.Web AV-Desk 6.2 (XML API 3.1)
+            - Fixes and improvements
+        </notes>
+        <contents>
+    	    <dir name="/">
+        	<file role="doc" name="README.md"/>
+            	<file role="doc" name="LICENSE"/>
+            	<file role="src" name="dwavd.ini"/>
+        	<file role="src" name="config.m4"/>
+        	<file role="src" name="config.w32"/>
+                <file role="src" name="dwavd.c"/>
+                <file role="src" name="php_utils.c"/>
+        	<file role="src" name="php_dwavd.h"/>
+                <file role="src" name="php_utils.h"/>
+    	    </dir>
+        </contents>
+        <dependencies>
+    	    <required>
+            	<php>
+            	   <min>5.3.0</min>
+            	</php>
+                <pearinstaller>
+            	   <min>1.4.0a1</min>
+            	</pearinstaller>
+    	    </required>
+        </dependencies>
+        <providesextension>dwavd</providesextension>
+        <extsrcrelease>
+            <configureoption default="no" name="with-dwavd" prompt="libdwavdapi installation prefix"/>
+        </extsrcrelease>
+        <changelog>
+    	    <release>
+        	<version>
+        	    <date>2013-06-03</date>
+            	    <release>1.1.0</release>
+            	    <api>1.1.0</api>
+            	</version>
+            	<stability>
+            	    <release>stable</release>
+            	    <api>stable</api>
+            	</stability>
+        	<notes>
+            	    - Added support Dr.Web AV-Desk 6.2 (XML API 3.1)
+            	    - Fixes and improvements
+            	</notes>
+    	    </release>
+    	</changelog>
+</package>
