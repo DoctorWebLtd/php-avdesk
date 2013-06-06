@@ -509,7 +509,8 @@ static _dwavd_opt _dwavd_stopt_array[] = {
     {"block_ends", DWAVD_ST_BLOCK_ENDS},
     {"lastseen_time", DWAVD_ST_LASTSEEN_TIME},
     {"lastseen_addr", DWAVD_ST_LASTSEEN_ADDR},
-    {"delete_emails", DWAVD_ST_DEL_EMAILS}
+    {"delete_emails", DWAVD_ST_DEL_EMAILS},
+    {"scc", DWAVD_ST_SCC}
 };
 
 
@@ -5151,6 +5152,15 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
                 php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected integer, got %s", _dwavd_var_type(val)); 
                 return 1; 
             }
+        case DWAVD_ST_SCC:
+    	    if(Z_TYPE_P(val) == IS_BOOL) {
+    		if(DWAVDAPI_SUCCESS == dwavdapi_station_set_scc(st, Z_BVAL_P(val))) { 
+                    return 0; 
+                } 
+    	    } else {
+    		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected bool, got %s", _dwavd_var_type(val)); 
+                return 1; 
+    	    }
     }    
     return 1;
 }
