@@ -12,14 +12,14 @@
     	    <email>adobkin@php.net</email>
     	    <active>yes</active>
         </lead>
-        <date>2013-06-03</date>
+        <date>2013-06-06</date>
         <version>
-    	   <release>1.1.0</release>
+    	   <release>1.1.0b3</release>
     	   <api>1.1.0</api>
         </version>
         <stability>
-    	   <release>stable</release>
-    	   <api>stable</api>
+    	   <release>beta</release>
+    	   <api>beta</api>
         </stability>
         <license uri="https://github.com/DoctorWebLtd/php-avdesk/blob/master/LICENSE">Proprietary</license>
         <notes>
@@ -56,13 +56,13 @@
         <changelog>
     	    <release>
         	<version>
-        	    <date>2013-06-03</date>
-            	    <release>1.1.0</release>
+        	    <date>2013-06-06</date>
+            	    <release>1.1.0b3</release>
             	    <api>1.1.0</api>
             	</version>
             	<stability>
-            	    <release>stable</release>
-            	    <api>stable</api>
+            	    <release>beta</release>
+            	    <api>beta</api>
             	</stability>
         	<notes>
             	    - Added support Dr.Web AV-Desk 6.2 (XML API 3.1)
