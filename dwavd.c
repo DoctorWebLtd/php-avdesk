@@ -865,11 +865,12 @@ static void _dwavd_traffic_array(zval **php_array, const dwavdapi_statistics_tra
 }
 
 static void _dwavd_virus_array(zval **php_array, const dwavdapi_virus *virus) {
-    TSRMLS_FETCH();
-    
     zval *array = NULL;
     zval *objects_array = NULL;
     dwavdapi_list *list = NULL;
+    
+    TSRMLS_FETCH();
+    
     MAKE_STD_ZVAL(array)
     array_init(array);
     if(NULL != virus) {  
