@@ -1058,6 +1058,7 @@ ZEND_END_ARG_INFO()
 const zend_function_entry dwavd_functions[] = {
     PHP_FE(dwavd_init, NULL)
     PHP_FE(dwavd_free, NULL)
+    PHP_FE(dwavd_switch_to_debug_mode, NULL)
     PHP_FE(dwavd_error, ai_dwavd_error)
     PHP_FE(dwavd_version, NULL)
     PHP_FE(dwavd_lib_version, NULL)
@@ -1751,6 +1752,28 @@ PHP_FUNCTION(dwavd_free) {
     }
     DWAVD_FETCH_HANDLE_WITH_RETURN_FALSE(handle, Z_RESVAL_P(res), le_dwavd, rsrc_type)
     if(FAILURE == zend_list_delete(Z_RESVAL_P(res))) {
+        RETURN_FALSE
+    }
+    RETURN_TRUE
+}
+
+
+/** mixed dwavd_switch_to_debug_mode(string debug_filepath)
+
+   Permanently switches dwavdapi library to debug mode when debug 
+   information including server responses is written into a file. */
+PHP_FUNCTION(dwavd_switch_to_debug_mode) {
+    char *fpath = NULL;
+    int fpath_len = 0;
+    
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &fpath, &fpath_len)==FAILURE) {
+	return;
+    }
+    if (fpath_len==0) {
+        php_error_docref(NULL TSRMLS_CC, E_WARNING, "Debug file path is not specified");
+        RETURN_FALSE
+    }
+    if (dwavdapi_debug_init(fpath)==DWAVDAPI_FAILURE) {
         RETURN_FALSE
     }
     RETURN_TRUE

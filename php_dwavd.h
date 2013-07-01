@@ -125,6 +125,7 @@ PHP_MINFO_FUNCTION(dwavd);
 
 PHP_FUNCTION(dwavd_init);
 PHP_FUNCTION(dwavd_free);
+PHP_FUNCTION(dwavd_switch_to_debug_mode);
 PHP_FUNCTION(dwavd_version);
 PHP_FUNCTION(dwavd_error);
 PHP_FUNCTION(dwavd_lib_version);
