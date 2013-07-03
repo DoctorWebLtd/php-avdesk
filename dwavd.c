@@ -1901,7 +1901,7 @@ PHP_FUNCTION(dwavd_set_login) {
 }
 
 
-/** bool dwavd_set_password(resource connection_res, string login)
+/** bool dwavd_set_password(resource connection_res, string password)
 
    Sets AV-Desk user password to be used for connection.
    Returns true on success, or false otherwise. */
