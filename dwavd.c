@@ -4821,7 +4821,8 @@ PHP_FUNCTION(dwavd_st) {
         case DWAVD_ST_MODIFIED:
             RETURN_LONG(dwavdapi_station_modified_time(st))
         case DWAVD_ST_EXPIRES:
-	    if(dwavdapi_station_expires_time(st) == DWAVDAPI_NOT_INITIALIZED) {
+	    if(dwavdapi_station_expires_time(st)==DWAVDAPI_NOT_INITIALIZED || 
+               dwavdapi_station_expires_time(st)==DWAVDAPI_RESET) {
 		RETURN_NULL()
 	    } 
     	    RETURN_LONG(dwavdapi_station_expires_time(st))
@@ -4900,12 +4901,14 @@ PHP_FUNCTION(dwavd_st) {
             rsrc_id = ZEND_REGISTER_RESOURCE(NULL, n_list, le_dwavd_component_installed)
             RETURN_RESOURCE(rsrc_id); 
         case DWAVD_ST_BLOCK_BEGINS:
-    	    if(dwavdapi_station_block_time_begin(st) == DWAVDAPI_NOT_INITIALIZED) {
+    	    if(dwavdapi_station_block_time_begin(st)==DWAVDAPI_NOT_INITIALIZED || 
+               dwavdapi_station_block_time_begin(st)==DWAVDAPI_RESET) {
 		RETURN_NULL()
 	    } 
             RETURN_LONG(dwavdapi_station_block_time_begin(st))
         case DWAVD_ST_BLOCK_ENDS:
-            if(dwavdapi_station_block_time_end(st) == DWAVDAPI_NOT_INITIALIZED) {
+            if(dwavdapi_station_block_time_end(st)==DWAVDAPI_NOT_INITIALIZED || 
+               dwavdapi_station_block_time_end(st)==DWAVDAPI_RESET) {
 		RETURN_NULL()
 	    }
             RETURN_LONG(dwavdapi_station_block_time_end(st))
@@ -4960,7 +4963,8 @@ PHP_FUNCTION(dwavd_st_array) {
     add_assoc_long(return_value, "created", dwavdapi_station_created_time(st));
     add_assoc_long(return_value, "modified", dwavdapi_station_modified_time(st));
     
-    if(dwavdapi_station_expires_time(st) == DWAVDAPI_NOT_INITIALIZED) {
+    if (dwavdapi_station_expires_time(st)==DWAVDAPI_NOT_INITIALIZED || 
+       dwavdapi_station_expires_time(st)==DWAVDAPI_RESET) {
 	add_assoc_null(return_value, "expires");
     } else {
 	add_assoc_long(return_value, "expires", dwavdapi_station_expires_time(st));
@@ -4972,13 +4976,15 @@ PHP_FUNCTION(dwavd_st_array) {
     add_assoc_long(return_value, "latitude", dwavdapi_station_latitude(st));    
     add_assoc_long(return_value, "state", dwavdapi_station_state(st));
     
-    if( dwavdapi_station_block_time_begin(st) == DWAVDAPI_NOT_INITIALIZED) {
+    if (dwavdapi_station_block_time_begin(st)==DWAVDAPI_NOT_INITIALIZED ||
+        dwavdapi_station_block_time_begin(st)==DWAVDAPI_RESET) {
 	add_assoc_null(return_value, "block_begins");
     } else {
 	add_assoc_long(return_value, "block_begins",  dwavdapi_station_block_time_begin(st));
     }
     
-    if(dwavdapi_station_block_time_end(st) == DWAVDAPI_NOT_INITIALIZED) {
+    if (dwavdapi_station_block_time_end(st)==DWAVDAPI_NOT_INITIALIZED ||
+        dwavdapi_station_block_time_end(st)==DWAVDAPI_RESET) {
 	add_assoc_null(return_value, "block_ends");
     } else {
 	add_assoc_long(return_value, "block_ends", dwavdapi_station_block_time_end(st));
