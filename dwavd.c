@@ -5051,7 +5051,6 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
                 return 1;
             }
             return 0;
-            DWAVD_ST_SET_LONG(st, country, val)
         case DWAVD_ST_LONGITUDE:
             DWAVD_ST_SET_LONG(st, longitude, val)
         case DWAVD_ST_LATITUDE:
@@ -5067,10 +5066,9 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
                 } 
              } else {
                 php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected integer, got %s", _dwavd_var_type(val)); 
-                return 1; 
-            }
-
-            DWAVD_ST_SET_LONG(st, expires_time, val)
+                return 1;
+             }
+            break;
         case DWAVD_ST_CITY:
              DWAVD_ST_SET_STRING(st, city, val, 0)
         case DWAVD_ST_FLOOR:
@@ -5158,7 +5156,7 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
             }
             return 0;
         case DWAVD_ST_BLOCK_BEGINS:
-            if(Z_TYPE_P(val) == IS_NULL) { 
+             if(Z_TYPE_P(val) == IS_NULL) { 
                 if(DWAVDAPI_SUCCESS == dwavdapi_station_set_block_time(st, DWAVDAPI_RESET, -1)) { 
                     return 0;
                 } 
@@ -5169,20 +5167,22 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
              } else {
                 php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected integer, got %s", _dwavd_var_type(val)); 
                 return 1; 
-            }
+             }
+             break;
         case DWAVD_ST_BLOCK_ENDS:
             if(Z_TYPE_P(val) == IS_NULL) { 
                 if(DWAVDAPI_SUCCESS == dwavdapi_station_set_block_time(st, -1, DWAVDAPI_RESET)) { 
                     return 0;
                 } 
-             } else if(Z_TYPE_P(val) == IS_LONG) { 
+            } else if(Z_TYPE_P(val) == IS_LONG) { 
                 if(DWAVDAPI_SUCCESS == dwavdapi_station_set_block_time(st, -1, Z_LVAL_P(val))) { 
                     return 0; 
                 } 
-             } else {
+            } else {
                 php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected integer, got %s", _dwavd_var_type(val)); 
                 return 1; 
             }
+            break;
         case DWAVD_ST_SCC:
     	    if(Z_TYPE_P(val) == IS_BOOL) {
     		if(DWAVDAPI_SUCCESS == dwavdapi_station_set_scc(st, Z_BVAL_P(val))) { 
@@ -5192,6 +5192,7 @@ static int _dwavd_st_set(dwavdapi_station *st, int flag TSRMLS_DC, zval *val) {
     		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected bool, got %s", _dwavd_var_type(val)); 
                 return 1; 
     	    }
+            break;
     }    
     return 1;
 }
