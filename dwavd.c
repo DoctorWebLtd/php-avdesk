@@ -198,7 +198,9 @@ static _dwavd_opt _dwavd_srvkeyopt_array[] = {
     modified - Modified at timestamp
     name - First name
     password - 
-    type - Type ID: global vs. group
+    type - Type ID: DWAVD_ADMIN_TYPE_GLOBAL_ADMIN or DWAVD_ADMIN_TYPE_GROUP_ADMIN
+    readonly - Readonly boolean flag
+    limited_rights - Limited rights boolean flag
     delete_from_groups - Groups IDs list to remove the administrator from
 */
 static _dwavd_opt _dwavd_admopt_array[] = {
