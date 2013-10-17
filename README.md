@@ -47,3 +47,6 @@ Dr.Web php-avdesk is distributed under license available from LICENSE file.
 --
 * http://www.drweb.com
 * http://www.av-desk.com
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/DoctorWebLtd/php-avdesk/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
