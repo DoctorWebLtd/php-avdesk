@@ -217,6 +217,7 @@ static _dwavd_opt _dwavd_admopt_array[] = {
     {"password", DWAVD_ADM_PASSWORD},
     {"type", DWAVD_ADM_TYPE},
     {"readonly", DWAVD_ADM_READ_ONLY},
+    {"may_create_admins", DWAVD_ADM_MAY_CREATE_ADMINS},
     {"limited_rights", DWAVD_ADM_LIMITED_RIGHTS},
     {"delete_from_groups", DWAVD_ADM_DEL_FROM_GROUPS}
 };
@@ -2591,6 +2592,8 @@ PHP_FUNCTION(dwavd_adm) {
             RETURN_BOOL(dwavdapi_admin_has_limited_rights(adm));
         case DWAVD_ADM_READ_ONLY:
             RETURN_BOOL(dwavdapi_admin_is_readonly(adm));
+        case DWAVD_ADM_MAY_CREATE_ADMINS:
+            RETURN_BOOL(dwavdapi_admin_may_create_admins(adm));
     }
     DWAVD_UNKNOWN_OPTION(opt)    
 }
@@ -2656,6 +2659,8 @@ static int _dwavd_adm_set(dwavdapi_admin *adm, int flag TSRMLS_DC, zval *val) {
             DWAVD_ADM_SET_BOOL(adm, limited_rights, val) 
         case DWAVD_ADM_READ_ONLY:
             DWAVD_ADM_SET_BOOL(adm, readonly, val) 
+        case DWAVD_ADM_MAY_CREATE_ADMINS:
+            DWAVD_ADM_SET_BOOL(adm, may_create_admins, val) 
         case DWAVD_ADM_GROUPS: {
             DWAVD_EXPECTED_ARRAY_WITH_RET(val, 1)
             for(zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(val), &pos); 
