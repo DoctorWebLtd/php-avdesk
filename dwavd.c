@@ -2496,10 +2496,9 @@ PHP_FUNCTION(dwavd_adm_init) {
     ZEND_REGISTER_RESOURCE(return_value, adm, le_dwavd_adm);
 }
 
+/** mixed dwavd_adm_get_info(resource connection_res, string admin_login)
 
-/** mixed dwavd_adm_get_info(resource connection_res)
-
-   Makes a request to AV-Desk to get administrator information resource.
+   Makes a request to AV-Desk to get administrator information about admin with login `admin_login'.
    Returns group information resource on success, or NULL otherwise. */
 PHP_FUNCTION(dwavd_adm_get_info) {
     zval *res = NULL;
@@ -2934,9 +2933,9 @@ PHP_FUNCTION(dwavd_grp_init) {
 }
 
 
-/** mixed dwavd_grp_get_info(resource connection_res)
+/** mixed dwavd_grp_get_info(resource connection_res, string group_id)
 
-   Makes a request to AV-Desk to get group information resource.
+   Makes a request to AV-Desk to get information about group with ID `group_id'.
    Returns group information resource on success, or NULL otherwise. */
 PHP_FUNCTION(dwavd_grp_get_info) {
     zval *res = NULL;
@@ -4735,9 +4734,9 @@ PHP_FUNCTION(dwavd_st_init) {
 }
 
 
-/** mixed dwavd_st_get_info(resource connection_res)
+/** mixed dwavd_st_get_info(resource connection_res, string station_id)
 
-   Makes a request to AV-Desk to get station information resource.
+   Makes a request to AV-Desk to get information about station with ID `station_id'.
    Returns station information resource on success, or NULL otherwise. */
 PHP_FUNCTION(dwavd_st_get_info) {
     zval *res = NULL;
